@@ -77,20 +77,27 @@ off_probs=generate_offprob()
 
 full_sim <- function(sSS=0,sSR=0,initRR=0.01,initSR=0.01,off_probs,costS=0,costtype=0){
   
-  simM <- array(0,dim=c(tend,ngenos))
-  simM[1,] <- c(initRR,initSR,1-(initRR+initSR))
-  simF <- simM
-
-  for (t in 2:(tend)){
-    simFtemp <- simF[t-1,]#fitness_assesser(simF[t-1,],sS=sS,h=h)
-    simMtemp <- simM[t-1,]#fitness_assesser(simM[t-1,],sS=sS,h=h)
-    nextgen <- freq_calc(simFtemp,simMtemp,off_probs)
-    nextgen <- fitness_assesser(nextgen,sSS=sSS,sSR=sSR,costS=costS,type=costtype)
-    simF[t,] <- nextgen
-    simM[t,] <- nextgen
-  }
-  out <- data.frame((simM+simF)/2)
+  out <- as.data.frame(matrix(nrow=tend,ncol=3))
   colnames(out) <- genotype_names
+  out[1,] <- c(initRR,initSR,1-(initRR+initSR))
+  
+  for (t in 2:(tend)){
+    simM <- array(0,dim=c(12,ngenos))
+    simM[1,] <- c(initRR,initSR,1-(initRR+initSR))
+    simF <- simM
+    for (i in 2:12){
+      simFtemp <- simF[i-1,]#fitness_assesser(simF[t-1,],sS=sS,h=h)
+      simMtemp <- simM[i-1,]#fitness_assesser(simM[t-1,],sS=sS,h=h)
+      nextgen <- freq_calc(simFtemp,simMtemp,off_probs)
+      nextgen <- fitness_assesser(nextgen,sSS=sSS,sSR=sSR,costS=costS,type=costtype)
+      simF[i,] <- nextgen
+      simM[i,] <- nextgen
+      
+    }
+    out[t,] <- colMeans((simM+simF)/2)
+    initRR <- out[t,"RR"]
+    initSR <- out[t,"SR"]
+  }
   out
 }
 
@@ -125,9 +132,8 @@ transfrom <- function(p) 1/(1+exp(-p))
 ## read in data from current working directory
 dat <- read.csv('mc.1534.yr_reduced.csv')
 # dat <- read.csv('mc.1016.yr_reduced.csv')
-# subset to assess specific time periods
-dat <- dat %>% subset(year < 2005)
 
+dat <- dat %>% subset(year <= 2005)
 freq_dat <- dat
 freq_dat[,c("RR","SR","SS")] <- freq_dat[,c("RR","SR","SS")]/rowSums(freq_dat[,c("RR","SR","SS")])
 
