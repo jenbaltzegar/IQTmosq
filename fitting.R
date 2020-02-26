@@ -125,6 +125,8 @@ transfrom <- function(p) 1/(1+exp(-p))
 ## read in data from current working directory
 dat <- read.csv('mc.1534.yr_reduced.csv')
 # dat <- read.csv('mc.1016.yr_reduced.csv')
+# subset to assess specific time periods
+dat <- dat %>% subset(year < 2005)
 
 freq_dat <- dat
 freq_dat[,c("RR","SR","SS")] <- freq_dat[,c("RR","SR","SS")]/rowSums(freq_dat[,c("RR","SR","SS")])
@@ -135,7 +137,9 @@ tend <- nrow(dat)
 
 #costtype 0 for separate costs for each genotype: estimate costs sSS and sSR
 pars <- c("sSS"=0,"sSR"=0,"initRR"=0,"initSR"=0)
-parnames <- c("sSS","sSR","initRR","initSR")
+pars[c(3,4)] <- unlist(freq_dat[1,c("RR","SR")])
+parnames <- c("sSS","sSR")#,"initRR","initSR")
+# parnames <- c("sSS","sSR","initRR","initSR")
 estim_dat <- freq_dat %>% subset(select=c(RR,SR,SS))
 
 p <- rep(0.3,length(parnames)) # initial parameter values
