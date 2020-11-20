@@ -95,8 +95,8 @@ full_sim <- function(sSS=0,sSR=0,initRR=0.01,initSR=0.01,off_probs,costS=0,costt
       
     }
     out[t,] <- colMeans((simM+simF)/2)
-    initRR <- out[t,"RR"]
-    initSR <- out[t,"SR"]
+    initRR <- nextgen[1]
+    initSR <- nextgen[2]
   }
   out
 }
@@ -132,7 +132,6 @@ transfrom <- function(p) 1/(1+exp(-p))
 ## read in data from current working directory
 dat <- read.csv('mc.1534.yr_reduced.csv')
 # dat <- read.csv('mc.1016.yr_reduced.csv')
-
 dat <- dat %>% subset(year <= 2005)
 freq_dat <- dat
 freq_dat[,c("RR","SR","SS")] <- freq_dat[,c("RR","SR","SS")]/rowSums(freq_dat[,c("RR","SR","SS")])

@@ -12,22 +12,34 @@ mc.1016.b <- read.csv("mc.1016.b.csv")
 # 3/19/18 - Subset mc.1016.t to remove March data because sample size is too low currently n = 4
 mc.1016.t <- mc.1016.t[-3,]
 
+# create custom theme - from Michael Vella -----
+library(ggthemes)
+my_theme <- function(){
+  theme_foundation(base_size=14) + 
+    theme(
+      plot.title = element_text(face = "bold",size = rel(1.2), hjust = 0.5),
+      panel.background = element_rect(colour = NA),
+      plot.background = element_rect(colour = NA),
+      panel.border = element_rect(colour = NA),
+      panel.spacing=unit(1, "lines"),
+      axis.title = element_text(face = "bold"),
+      axis.title.y = element_text(vjust = 2),
+      axis.title.x = element_text(vjust = -0.2),
+      axis.line = element_line(colour="black"),
+      panel.grid.major = element_line(colour="#f0f0f0"),
+      panel.grid.minor = element_blank(),
+      plot.margin=unit(c(10,5,5,5),"mm"),
+      strip.background=element_rect(colour="#f0f0f0",fill="#f0f0f0"),
+      strip.text = element_text(face="bold")
+    )
+}
+
 # Plot
 kdrZones14 <- ggplot(mc.1016.t, aes(x=month, y=freqR)) +
-  theme_bw() + #removes grey background 
-  theme(plot.background = element_blank()
-        , panel.grid.major = element_blank()
-        , panel.grid.minor = element_blank()
-        , panel.border = element_blank()
-        , axis.line = element_line(color = 'dark grey')
-        , plot.subtitle=element_text(size=18, hjust=0.5, face="italic")
-        , axis.title=element_text(size=14,face="bold")
-        , plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
-        , axis.text=element_text(size=12)
-        , legend.title = element_text(size = 14, face = "bold")
-        , legend.text = element_text(size=12)) +
-  
-  labs(x = "Month", y = "Frequency", title = "Year 2014 \n Frequency of Ile1016/Cys1534 Haplotype By Treatment Group"
+  my_theme() +
+  labs(x = "Month", y = ""
+       # , y = "Frequency"
+       # , title = "Year 2014 \n Frequency of Ile1016/Cys1534 Haplotype By Treatment Group"
        #, subtitle = "Error Bars = 95% CI"
        ) +
   scale_color_manual(name = "Treatment"
@@ -54,24 +66,24 @@ kdrZones14 <- ggplot(mc.1016.t, aes(x=month, y=freqR)) +
   #geom_smooth(data = mc.1016.b[!is.na(mc.1016.b$freqR),], method = "lm", color = "blue") +
   
 #Add n labels for each point
-  annotate("text", x=1, y=0.53, label = mc.1016.t$n[1], color = "red", fontface = 2) +
-  annotate("text", x=2, y=0.53, label = mc.1016.t$n[2], color = "red", fontface = 2) +
-  annotate("text", x=4, y=0.53, label = mc.1016.t$n[3], color = "red", fontface = 2) +
-  annotate("text", x=5, y=0.53, label = mc.1016.t$n[4], color = "red", fontface = 2) +
-  annotate("text", x=6, y=0.53, label = mc.1016.t$n[5], color = "red", fontface = 2) +
-  annotate("text", x=7, y=0.53, label = mc.1016.t$n[6], color = "red", fontface = 2) +
-  annotate("text", x=8, y=0.53, label = mc.1016.t$n[7], color = "red", fontface = 2) +
-  annotate("text", x=10, y=0.53, label = mc.1016.t$n[9], color = "red", fontface = 2) +
-  annotate("text", x=1, y=0.5, label = mc.1016.b$n[1], color = "blue", fontface = 2) +
-  annotate("text", x=2, y=0.5, label = mc.1016.b$n[2], color = "blue", fontface = 2) +
-  annotate("text", x=4, y=0.5, label = mc.1016.b$n[4], color = "blue", fontface = 2) +
-  annotate("text", x=5, y=0.5, label = mc.1016.b$n[5], color = "blue", fontface = 2) +
-  annotate("text", x=6, y=0.5, label = mc.1016.b$n[6], color = "blue", fontface = 2) +
-  annotate("text", x=7, y=0.5, label = mc.1016.b$n[7], color = "blue", fontface = 2) +
-  annotate("text", x=8, y=0.5, label = mc.1016.b$n[8], color = "blue", fontface = 2) +
-  annotate("text", x=10, y=0.5, label = mc.1016.b$n[10], color = "blue", fontface = 2) +
+  annotate("text", x=1, y=0.03, label = mc.1016.t$n[1], color = "red", fontface = 2) +
+  annotate("text", x=2, y=0.03, label = mc.1016.t$n[2], color = "red", fontface = 2) +
+  annotate("text", x=4, y=0.03, label = mc.1016.t$n[3], color = "red", fontface = 2) +
+  annotate("text", x=5, y=0.03, label = mc.1016.t$n[4], color = "red", fontface = 2) +
+  annotate("text", x=6, y=0.03, label = mc.1016.t$n[5], color = "red", fontface = 2) +
+  annotate("text", x=7, y=0.03, label = mc.1016.t$n[6], color = "red", fontface = 2) +
+  annotate("text", x=8, y=0.03, label = mc.1016.t$n[7], color = "red", fontface = 2) +
+  annotate("text", x=10, y=0.03, label = mc.1016.t$n[9], color = "red", fontface = 2) +
+  annotate("text", x=1, y=0.0, label = mc.1016.b$n[1], color = "blue", fontface = 2) +
+  annotate("text", x=2, y=0.0, label = mc.1016.b$n[2], color = "blue", fontface = 2) +
+  annotate("text", x=4, y=0.0, label = mc.1016.b$n[4], color = "blue", fontface = 2) +
+  annotate("text", x=5, y=0.0, label = mc.1016.b$n[5], color = "blue", fontface = 2) +
+  annotate("text", x=6, y=0.0, label = mc.1016.b$n[6], color = "blue", fontface = 2) +
+  annotate("text", x=7, y=0.0, label = mc.1016.b$n[7], color = "blue", fontface = 2) +
+  annotate("text", x=8, y=0.0, label = mc.1016.b$n[8], color = "blue", fontface = 2) +
+  annotate("text", x=10, y=0.0, label = mc.1016.b$n[10], color = "blue", fontface = 2) +
 
-  ylim(c(0.5,1)) +
+  ylim(c(0.0,1)) +
   #xlim(c(1,11)) +
   scale_x_continuous(breaks = pretty(mc.1016.t$month, n = 10)) 
 

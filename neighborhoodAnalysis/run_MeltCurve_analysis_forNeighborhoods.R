@@ -35,6 +35,7 @@ mid <- temp[temp$Y < '9586780' & temp$Y > '9583180',]
 bot <- temp[temp$Y <= '9583180',]
 top.L <- temp[temp$Y >= '9586780' & temp$X <= '694100',]
 top.R <- temp[temp$Y >= '9586780' & temp$X > '694100',]
+no.bot <- temp[temp$Y >= '9583180',] # for michael vella modeling fitting 2020-05-07
 
 # Save list of individuals for plotting
 write.csv(top, "../QGIS_Files/Routput/north.csv", row.names = FALSE)
@@ -42,6 +43,7 @@ write.csv(top.R, "../QGIS_Files/Routput/northEast.csv", row.names = FALSE)
 write.csv(top.L, "../QGIS_Files/Routput/northWest.csv", row.names = FALSE)
 write.csv(mid, "../QGIS_Files/Routput/central.csv", row.names = FALSE)
 write.csv(bot, "../QGIS_Files/Routput/south.csv", row.names = FALSE)
+write.csv(no.bot, "../QGIS_Files/Routput/noSouth.csv", row.names = FALSE) # for michael vella modeling fitting 2020-05-07
 
 # Subset top based on year - "North"
 top2000 <- top[top$newDate > '2000-01-01' & top$newDate < '2000-12-31',]

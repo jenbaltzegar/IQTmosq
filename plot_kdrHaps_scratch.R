@@ -47,7 +47,43 @@ kdrHaps <- ggplot(data = freqAll_long[!is.na(freqAll_long$Frequency),], aes(x=ye
   # scale_colour_discrete(name ="Haplotype", labels=c("wt1016/wt1534", "wt1016/Cys1534", "Ile1016/wt1534", "Ile1016/Cys1534")) +
   #geom_hline(yintercept = 0) +
 
-  ### Add background to represent type of insecticides used
+  # ### OLD!!! Add background to represent type of insecticides used -----
+  # # # Pyrethroids 2002 - 2014
+  # # geom_rect(data = NULL, aes(xmin = 2001.5, xmax = 2014.5, ymin = -Inf, ymax = Inf), fill="#DDCC77", alpha = 0.005) +
+  # # No pyrethroids
+  # geom_rect(data = NULL, aes(xmin = 1999.0, xmax = 2001.5, ymin = -Inf, ymax = Inf)
+  #           # , fill="No Pyrethroids"
+  #           , alpha = 0.1) +
+  # # Delatmethrin 2002 - 2007
+  # geom_rect(data = NULL, aes(xmin = 2001.5, xmax = 2007.5, ymin = -Inf, ymax = Inf)
+  #           # , fill="Deltamethrin"
+  #           , alpha = 0.1) +
+  # # Cypermethrin 2008
+  # geom_rect(data = NULL, aes(xmin = 2007.5, xmax = 2008.5, ymin = -Inf, ymax = Inf)
+  #           # , fill="Cypermethrin"
+  #           , alpha = 0.1) +
+  # # a-Cypermethrin 2009 - 2011
+  # geom_rect(data = NULL, aes(xmin = 2008.5, xmax = 2011.5, ymin = -Inf, ymax = Inf)
+  #           # , fill="a-Cypermethrin"
+  #           , alpha = 0.1) +
+  # # Cypermethrin & a-Cypermethrin 2012
+  # geom_rect(data = NULL, aes(xmin = 2011.5, xmax = 2012.5, ymin = -Inf, ymax = Inf)
+  #           # , fill="Cypermethrin & a-Cypermethrin"
+  #           , alpha = 0.1) +
+  # # Lambda & Alpha & Cyper & Alpha+pyriprox in 2013 
+  # geom_rect(data = NULL, aes(xmin = 2012.5, xmax = 2013.5, ymin = -Inf, ymax = Inf)
+  #           # , fill="Multiple*"
+  #           , alpha = 0.1) +
+  # # Cypermethrin 2014
+  # geom_rect(data = NULL, aes(xmin = 2013.5, xmax = 2014.5, ymin = -Inf, ymax = Inf)
+  #           # , fill="Cypermethrin"
+  #           , alpha = 0.1) +
+  # # No pyrethroids
+  # geom_rect(data = NULL, aes(xmin = 2014.5, xmax = 2018.0, ymin = -Inf, ymax = Inf)
+  #           # , fill="No Pyrethroids"
+  #           , alpha = 0.1) +
+  # 
+  ### NEW!!! Add background to represent type of insecticides used -----
   # # Pyrethroids 2002 - 2014
   # geom_rect(data = NULL, aes(xmin = 2001.5, xmax = 2014.5, ymin = -Inf, ymax = Inf), fill="#DDCC77", alpha = 0.005) +
   # No pyrethroids
@@ -67,7 +103,7 @@ kdrHaps <- ggplot(data = freqAll_long[!is.na(freqAll_long$Frequency),], aes(x=ye
   # No pyrethroids
   geom_rect(data = NULL, aes(xmin = 2014.5, xmax = 2018.0, ymin = -Inf, ymax = Inf, fill="No Pyrethroids"), colour=NA, alpha = 1) +
 
-  # ### Add text to represent type of insecticides used
+  # ### Add text to represent type of insecticides used -----
   # annotate("text", x= 2008.0, y=1.1, label = "Pyrethroids", size = 5, fontface = 2) +
   # annotate("text", x=2000.25, y=1.1, label = "No \n Pyrethroids", size = 5, fontface = 2) +
   # annotate("text", x=2004.5, y=1.05, label= "Delta", size = 4) +
@@ -122,8 +158,8 @@ kdrHaps <- ggplot(data = freqAll_long[!is.na(freqAll_long$Frequency),], aes(x=ye
         , legend.title.align=0.5) 
 
 
-# # Print graph to screen
-# kdrHaps
+# Print graph to screen
+kdrHaps
 
 # # Write plot to png
 # ggsave(filename = paste0("figures/kdrHaps/kdrHaps_bars/kdrHaps_", Sys.Date(), ".png"), width = 11, height = 8, dpi = 600, units = "in", device='png')
@@ -138,21 +174,21 @@ kdrHaps <- ggplot(data = freqAll_long[!is.na(freqAll_long$Frequency),], aes(x=ye
 
 # scratch to pick best graph
 # option 1 - change alpha
-option1 <- kdrHaps
+kdrHaps
 
 # option 2 - with custom sprayColors
-option2 <- kdrHaps +
+kdrHaps +
   scale_fill_manual(name = 'Pyrethroid Application',
                     values = sprayColors,  
                     guide = guide_legend(override.aes = list(alpha = 1))) 
 
 # option 3 - with gray.colors(6)
-option3 <- kdrHaps +
+kdrHaps +
   scale_fill_manual('Spraying Regime',
                     values = gray.colors(6),  
                     guide = guide_legend(override.aes = list(alpha = 1))) 
 
-# view graphs
-option1; option2; option3
-
+kdrHaps +
+  scale_fill_grey('Spraying Regime'
+                  , guide = guide_legend(override.aes = list(alpha = 1))) 
 

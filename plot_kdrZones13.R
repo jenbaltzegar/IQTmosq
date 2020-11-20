@@ -14,23 +14,46 @@ mc.1016.b13 <- read.csv("mc.1016.b13_reduced_expandedBuffer.csv")
 mc.1016.t13 <- mc.1016.t13[-c(3,9),]
 mc.1016.b13 <- mc.1016.b13[-c(3,9),]
 
+# create custom theme - from Michael Vella -----
+library(ggthemes)
+my_theme <- function(){
+  theme_foundation(base_size=14) + 
+    theme(
+      plot.title = element_text(face = "bold",size = rel(1.2), hjust = 0.5),
+      panel.background = element_rect(colour = NA),
+      plot.background = element_rect(colour = NA),
+      panel.border = element_rect(colour = NA),
+      panel.spacing=unit(1, "lines"),
+      axis.title = element_text(face = "bold"),
+      axis.title.y = element_text(vjust = 2),
+      axis.title.x = element_text(vjust = -0.2),
+      axis.line = element_line(colour="black"),
+      panel.grid.major = element_line(colour="#f0f0f0"),
+      panel.grid.minor = element_blank(),
+      plot.margin=unit(c(10,5,5,5),"mm"),
+      strip.background=element_rect(colour="#f0f0f0",fill="#f0f0f0"),
+      strip.text = element_text(face="bold")
+    )
+}
 
 # Plot
 kdrZones13 <- ggplot(mc.1016.t13, aes(x=month, y=freqR)) +
-  theme_bw() + #removes grey background 
-  theme(plot.background = element_blank()
-        , panel.grid.major = element_blank()
-        , panel.grid.minor = element_blank()
-        , panel.border = element_blank()
-        , axis.line = element_line(color = 'dark grey')
-        , plot.subtitle=element_text(size=18, hjust=0.5, face="italic")
-        , axis.title=element_text(size=14,face="bold")
-        , plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
-        , axis.text=element_text(size=12)
-        , legend.title = element_text(size = 14, face = "bold")
-        , legend.text = element_text(size=12)) +
+  my_theme() +
+  # theme_bw() + #removes grey background 
+  # theme(plot.background = element_blank()
+  #       , panel.grid.major = element_blank()
+  #       , panel.grid.minor = element_blank()
+  #       , panel.border = element_blank()
+  #       , axis.line = element_line(color = 'dark grey')
+  #       , plot.subtitle=element_text(size=18, hjust=0.5, face="italic")
+  #       , axis.title=element_text(size=14,face="bold")
+  #       , plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  #       , axis.text=element_text(size=12)
+  #       , legend.title = element_text(size = 14, face = "bold")
+  #       , legend.text = element_text(size=12)) +
   
-  labs(x = "Month", y = "Frequency", title = "Year 2013 \nFrequency of Ile1016/Cys1534 Haplotype By Treatment Group"
+  labs(x = "Month", y = "Frequency"
+       # , title = "Year 2013 \nFrequency of Ile1016/Cys1534 Haplotype By Treatment Group"
        #, subtitle = "Error Bars = 95% CI"
        ) +
   scale_color_manual(name = "Treatment"
