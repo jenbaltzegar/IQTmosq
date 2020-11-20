@@ -1,3 +1,8 @@
+########################################################
+# DEPRECATED code
+# See model_setup.R and model_runfile.R
+# model_setup.R includes a simplified (genotype frequency) model
+########################################################
 library(ggplot2)
 library(magrittr)
 library(reshape2)
