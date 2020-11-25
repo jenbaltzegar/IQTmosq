@@ -4,10 +4,12 @@
 #Load Library
 library(ggplot2)
 
+# set working directory
+# setwd("/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database")
+
 # Read in dataframes
-setwd("/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database")
-mc.1016.t <- read.csv("mc.1016.t.csv")
-mc.1016.b <- read.csv("mc.1016.b.csv")
+mc.1016.t <- read.csv("./data/mc.1016.t.csv")
+# mc.1016.b <- read.csv("mc.1016.b.csv")
 
 # 3/19/18 - Subset mc.1016.t to remove March data because sample size is too low currently n = 4
 mc.1016.t <- mc.1016.t[-3,]
@@ -92,7 +94,8 @@ kdrZones14 <- ggplot(mc.1016.t, aes(x=month, y=freqR)) +
 kdrZones14
  
 # Write plot to png
-ggsave(filename = paste0("figures/kdrZones/kdrZones_2014/kdrZones14_", Sys.Date(), ".png"), width = 11, height = 8, dpi = 600, units = "in", device='png')
+# ggsave(filename = paste0("figures/kdrZones/kdrZones_2014/kdrZones14_", Sys.Date(), ".png"), width = 11, height = 8, dpi = 600, units = "in", device='png')
+ggsave(filename = paste0("./data/kdrZones14_", Sys.Date(), ".png"), width = 11, height = 8, dpi = 600, units = "in", device='png')
 
 # 
 # # Write plot to pdf

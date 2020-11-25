@@ -20,7 +20,7 @@ library(ggplot2) # required to produce plots
 # Concatenate MeltCurve data files ----------------------------------------
 # Source script
 source("R_Scripts/IQTmosq/loop_MeltCurve_catFiles.R")
-# If you recieve the following error -- 
+# If you receive the following error -- 
 # "Error in file(file, "rt") : cannot open the connection' 
 # -- make sure all analysis files are available and named properly in MeltCurve folder"
 

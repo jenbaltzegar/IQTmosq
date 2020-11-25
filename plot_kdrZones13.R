@@ -5,14 +5,16 @@
 # Load Libraries
 library(ggplot2)
 
+# set working directory
+# setwd("/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database")
+
 # Read in dataframes
-setwd("/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database")
-mc.1016.t13 <- read.csv("mc.1016.t13_reduced.csv")
-mc.1016.b13 <- read.csv("mc.1016.b13_reduced_expandedBuffer.csv")
+mc.1016.t13 <- read.csv("./data/mc.1016.t13_reduced.csv")
+# mc.1016.b13 <- read.csv("mc.1016.b13_reduced_expandedBuffer.csv")
 
 # 3/28/18 - Subset mc.1016.t13 to remove March & September data because sample size is too low
 mc.1016.t13 <- mc.1016.t13[-c(3,9),]
-mc.1016.b13 <- mc.1016.b13[-c(3,9),]
+# mc.1016.b13 <- mc.1016.b13[-c(3,9),]
 
 # create custom theme - from Michael Vella -----
 library(ggthemes)
@@ -105,8 +107,9 @@ kdrZones13 <- ggplot(mc.1016.t13, aes(x=month, y=freqR)) +
 kdrZones13
  
 # Write plot to png
-ggsave(filename = paste0("figures/kdrZones/kdrZones_2013/kdrZones13_", Sys.Date(), ".png"), width = 11, height = 8, dpi = 600, units = "in", device='png')
- 
+# ggsave(filename = paste0("figures/kdrZones/kdrZones_2013/kdrZones13_", Sys.Date(), ".png"), width = 11, height = 8, dpi = 600, units = "in", device='png')
+ggsave(filename = paste0("./data/kdrZones13_", Sys.Date(), ".png"), width = 11, height = 8, dpi = 600, units = "in", device='png')
+
 # 
 # # Write plot to pdf
 # pdf(file = paste("figures/kdrZones/kdrZones_", Sys.Date(), ".pdf", sep = ""), 11, 8.5)
