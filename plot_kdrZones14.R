@@ -9,7 +9,7 @@ library(ggplot2)
 
 # Read in dataframes
 mc.1016.t <- read.csv("./data/mc.1016.t.csv")
-# mc.1016.b <- read.csv("mc.1016.b.csv")
+mc.1016.b <- read.csv("mc.1016.b.csv")
 
 # 3/19/18 - Subset mc.1016.t to remove March data because sample size is too low currently n = 4
 mc.1016.t <- mc.1016.t[-3,]

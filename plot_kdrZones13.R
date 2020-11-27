@@ -10,11 +10,11 @@ library(ggplot2)
 
 # Read in dataframes
 mc.1016.t13 <- read.csv("./data/mc.1016.t13_reduced.csv")
-# mc.1016.b13 <- read.csv("mc.1016.b13_reduced_expandedBuffer.csv")
+mc.1016.b13 <- read.csv("mc.1016.b13_reduced_expandedBuffer.csv")
 
 # 3/28/18 - Subset mc.1016.t13 to remove March & September data because sample size is too low
 mc.1016.t13 <- mc.1016.t13[-c(3,9),]
-# mc.1016.b13 <- mc.1016.b13[-c(3,9),]
+mc.1016.b13 <- mc.1016.b13[-c(3,9),]
 
 # create custom theme - from Michael Vella -----
 library(ggthemes)
