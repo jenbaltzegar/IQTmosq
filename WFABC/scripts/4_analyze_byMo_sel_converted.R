@@ -1,14 +1,14 @@
 #!/usr/bin/env Rscript
 
-# This script will analyze & plot output from WFABC posteriors.
+# This script will analyze & plot output from WFABC posteriors that have been converted.
 # Only the single loci under selection will be analyzed here.
 
 ### Set up the working space ----------------------------
 # clear working environment
 rm(list = ls())
 
-# Set working directory
-setwd("/home/gould/Documents/jen.temp/jfbaltz_kdr/WFABC")
+# # Set working directory
+# setwd("/home/gould/Documents/jen.temp/jfbaltz_kdr/WFABC")
 
 # Load libraries
 require(MASS)

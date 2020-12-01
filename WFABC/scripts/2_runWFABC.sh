@@ -3,14 +3,14 @@
 # This script will run data through the WFABC pipeline
 
 # change directory
-cd ~/Documents/jen.temp/jfbaltz_kdr/WFABC
+cd ./WFABC
 
 ### Run the WFABC analysis
 
 # set some params
 # data1="./multiple_loci.txt"
-data2="./V1016I_underSelection.txt"
-data3="./F1534C_underSelection.txt"
+# data2="./V1016I_underSelection.txt"
+# data3="./F1534C_underSelection.txt"
 # data4="./V1016I_byMo.txt"
 # data5="./F1534C_byMo.txt"
 # data6="./multiple_loci_byMo.txt"
@@ -26,28 +26,30 @@ max_h=1
 
 # step 1 - estimating s
 # /home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_1 -nboots 0 $data1
-/home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_1 -nboots 0 $data2
-/home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_1 -nboots 0 $data3
+# /home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_1 -nboots 0 $data2
+# /home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_1 -nboots 0 $data3
 # /home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_1 -nboots 0 $data4
 # /home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_1 -nboots 0 $data5
 # /home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_1 -nboots 0 $data6
 # /home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_1 -nboots 0 $data7
-/home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_1 -nboots 0 $data8
-/home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_1 -nboots 0 $data9
+# /home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_1 -nboots 0 $data8
+# /home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_1 -nboots 0 $data9
+../programs/WFABC_v1.1/binaries/Linux/wfabc_1 -nboots 0 $data8
+../programs/WFABC_v1.1/binaries/Linux/wfabc_1 -nboots 0 $data9
 
 # # step 2 - estimating h
 # /home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_2 \
 #   -fixed_N $twoNe -min_s $min_s -max_s $max_s \
 #   -min_h $min_h -max_h $max_h \
 #   $data1
-/home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_2 \
-  -fixed_N $twoNe -min_s $min_s -max_s $max_s \
-  -min_h $min_h -max_h $max_h \
-  $data2
-/home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_2 \
-  -fixed_N $twoNe -min_s $min_s -max_s $max_s \
-  -min_h $min_h -max_h $max_h \
-  $data3
+# /home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_2 \
+#   -fixed_N $twoNe -min_s $min_s -max_s $max_s \
+#   -min_h $min_h -max_h $max_h \
+#   $data2
+# /home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_2 \
+#   -fixed_N $twoNe -min_s $min_s -max_s $max_s \
+#   -min_h $min_h -max_h $max_h \
+#   $data3
 # /home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_2 \
 #   -fixed_N $twoNe -min_s $min_s -max_s $max_s \
 #   -min_h $min_h -max_h $max_h \
@@ -64,11 +66,19 @@ max_h=1
 #   -fixed_N $twoNe -min_s $min_s -max_s $max_s \
 #   -min_h $min_h -max_h $max_h \
 #   $data7
-/home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_2 \
+# /home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_2 \
+#   -fixed_N $twoNe -min_s $min_s -max_s $max_s \
+#   -min_h $min_h -max_h $max_h \
+#   $data8
+# /home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_2 \
+#   -fixed_N $twoNe -min_s $min_s -max_s $max_s \
+#   -min_h $min_h -max_h $max_h \
+#   $data9
+../programs/WFABC_v1.1/binaries/Linux/wfabc_2 \
   -fixed_N $twoNe -min_s $min_s -max_s $max_s \
   -min_h $min_h -max_h $max_h \
   $data8
-/home/gould/src/WFABC_v1.1/binaries/Linux/wfabc_2 \
+../programs/WFABC_v1.1/binaries/Linux/wfabc_2 \
   -fixed_N $twoNe -min_s $min_s -max_s $max_s \
   -min_h $min_h -max_h $max_h \
   $data9
