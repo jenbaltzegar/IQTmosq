@@ -1,7 +1,10 @@
 # Load Libraries
 library(ggplot2)
 library(ggthemes)
+library(plyr)
+## pipe operator: %.>%
 library(wrapr)
+library(emmeans)
 
 # create custom theme - from Michael Vella -----
 my_theme <- (
