@@ -988,19 +988,19 @@ write.csv(mc.1016.moyr, file = "/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquit
 write.csv(mc.1534.moyr, file = "/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database/mc.1534.MoYr_reduced_byMonth.csv", row.names = F)
 
 
-# scratch work
-library(lubridate)
-head(parse_date_time(mc.1534.moyr$MonthYear, "m-y"))
-
-plot(parse_date_time(mc.1534.moyr$MonthYear, "m-y"), mc.1534.moyr$freqR, type = "o")
-
-
-# pull out samples from october 2002
-temp <- kdrData[kdrData$newDate >= "2002-10-01" & kdrData$newDate <= "2002-10-31",]
-temp
-nrow(temp)
-temp <- temp[, c(1:2, 11:13, 25:26, 28)]
-nrow(temp)
-temp <- temp[complete.cases(temp), ]
-nrow(temp)
-temp
+# # scratch work
+# library(lubridate)
+# head(parse_date_time(mc.1534.moyr$MonthYear, "m-y"))
+# 
+# plot(parse_date_time(mc.1534.moyr$MonthYear, "m-y"), mc.1534.moyr$freqR, type = "o")
+# 
+# 
+# # pull out samples from october 2002
+# temp <- kdrData[kdrData$newDate >= "2002-10-01" & kdrData$newDate <= "2002-10-31",]
+# temp
+# nrow(temp)
+# temp <- temp[, c(1:2, 11:13, 25:26, 28)]
+# nrow(temp)
+# temp <- temp[complete.cases(temp), ]
+# nrow(temp)
+# temp
