@@ -1,28 +1,18 @@
 # Create matrix of haplotype probabilities
-# Create graph of Frequency of kdr Haplotypes
 # Started: 8/1/17
+# depends on setup_jb.R and meltcurve_analysis.R
 
 # This matrix assumes that RS does not exist in the population
 # Locus 1016 is always written first
 
-### Prepare workspace ------------------------------------------------------------
-# Clear working environment
-# rm(list = ls())
-# Set working directory
-setwd("~/Dropbox/GouldLab/Project_Mosquito/Database")
-
-# Load required libraries
-library(reshape2)
-
-# Load mc.haps.yr file
-mc.haps.yr <- read.csv("mc.haps.yr_reduced.csv")
+# # Required libraries
+# library(reshape2)
 
 ### Create matrix of haplotype probabilities ------------------------------------------------------------
 genos <- c("SSSS", "SSSR", "SSRR", "SRSS", "SRSR", "SRRR", "RRSS", "RRSR", "RRRR")
 haps <- c("SS", "SR", "RS", "RR")
 HapProbs <- matrix(data = c(1,0,0,0,0.5,0.5,0,0,0,1,0,0,1,0,0,0,0.33,0.33,0,0.33,0,0.5,0,0.5,0,0,0,0,0,0,0,1,0,0,0,1)
        , nrow = 9, ncol = 4, byrow = T, dimnames = list(genos, haps))
-# HapProbs
 
 ### Impute haplotype numbers ------------------------------------------------------------
 # 2000
@@ -329,7 +319,6 @@ sumAll <- rbind(sum2000, sum2001, sum2002, sum2003, sum2004, sum2005, sum2006, s
 
 row.names(sumAll) <- (c("2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008"
                         , "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017"))
-# sumAll
 
 
 ### Get the frequency of haps for each year ------------------------------------------------------------
@@ -361,9 +350,6 @@ row.names(freqAll) <- (c("2000", "2001", "2002", "2003", "2004", "2005", "2006",
 freqAll <- as.data.frame(freqAll)
 year <- 2000:2017
 freqAll <- cbind(freqAll, year)
-# freqAll
-# Save df to .csv file
-write.csv(freqAll, "freqAll.csv", row.names = FALSE)
 
 ### Calculate 95% Confidence Interval (not for ribbon CIs) ------------------------------------------------------------
 ## for column 1: SS
@@ -409,31 +395,13 @@ CI_95.RR <- df
 CI_95 <- rbind(CI_95.SS, CI_95.SR, CI_95.RS, CI_95.RR)
 
 
-
 ### Converting from wide to long format ------------------------------------------------------------
 freqAll_long <- melt(freqAll, id.vars="year", variable.name = "Haplotype", value.name = "Frequency")
 freqAll_long <- cbind(freqAll_long, CI_95)
-write.csv(freqAll_long, "freqAll_long.csv", row.names = FALSE)
 
-# Subset data based on haplotype
-freqSS <- freqAll_long[freqAll_long$Haplotype=="SS", ]
-freqSR <- freqAll_long[freqAll_long$Haplotype=="SR", ]
-freqRS <- freqAll_long[freqAll_long$Haplotype=="RS", ]
-freqRR <- freqAll_long[freqAll_long$Haplotype=="RR", ]
-
-# ### Plot graph ------------------------------------------------------------
-# source("R_Scripts/IQTmosq/plot_kdrHaps.R")
-# # View plot
-# kdrHaps
-# 
-# # # Write plot to pdf
-# # pdf(file = paste("figures/kdrHaps/kdrHaps_", Sys.Date(), ".pdf", sep = ""), 11, 8.5)
-# # print(kdrHaps)
-# # dev.off()
-# 
-# # Write plot to png
-# ggsave(filename = paste0("figures/kdrHaps/kdrHaps_bars/kdrHaps_", Sys.Date(), ".png"), width = 11, height = 8, dpi = 600, units = "in", device='png')
-# 
-# 
-
+# # Subset data based on haplotype
+# freqSS <- freqAll_long[freqAll_long$Haplotype=="SS", ]
+# freqSR <- freqAll_long[freqAll_long$Haplotype=="SR", ]
+# freqRS <- freqAll_long[freqAll_long$Haplotype=="RS", ]
+# freqRR <- freqAll_long[freqAll_long$Haplotype=="RR", ]
 

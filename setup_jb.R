@@ -8,10 +8,13 @@ library(gdata)
 options(gsubfn.engine = "R") # prevents R from stalling while loading sqldf library
 library(sqldf)
 library(dplyr)
+library(reshape2) # for haplotype imputation
 library(ggplot2)
+# library(RColorBrewer)
 library(ggthemes)
 library(RVAideMemoire) # for repeated g-test
 library(genetics) # for LD analysis
+
 
 # Source functions -----
 source("loop_MeltCurve_catFiles.R") # concatenates various meltcurve rep files

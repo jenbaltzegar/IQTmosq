@@ -1,18 +1,19 @@
 # This script performs a "Repeated G-Test" on 2013 V1016I data
 # Started 28 Mar 2018
+# depends on setup_jb.R and meltcurve_analysis.R
 
-# Prepare working environment
-rm(list = ls())
-setwd("/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database")
-# Load required libraries
-# RVAideMemoire manual at https://cran.r-project.org/web/packages/RVAideMemoire/index.html
-library(RVAideMemoire)
-library(dplyr)
+# # Prepare working environment
+# rm(list = ls())
+# setwd("/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database")
+# # Load required libraries
+# # RVAideMemoire manual at https://cran.r-project.org/web/packages/RVAideMemoire/index.html
+# library(RVAideMemoire)
+# library(dplyr)
 
-# Load mc.1016.t13 and mc.1016.b13 data
-mc.1016.t13 <- read.csv("mc.1016.t13_reduced.csv")
-mc.1016.b13 <- read.csv("mc.1016.b13_reduced_expandedBuffer.csv")
-# mc.1016.b13 <- read.csv("mc.1016.b13_reduced.csv")
+# # Load mc.1016.t13 and mc.1016.b13 data
+mc.1016.t13 <- read.csv("../../mc.1016.t13_reduced.csv")
+mc.1016.b13 <- read.csv("../../mc.1016.b13_reduced_expandedBuffer.csv")
+# # mc.1016.b13 <- read.csv("mc.1016.b13_reduced.csv")
 
 # 3/28/18 - Subset mc.1016.t13 to remove March & September data because sample size is too low
 # G test should not be done on zero values. 
@@ -94,8 +95,8 @@ Fun.p = function (Q){
 mc.1016.2013 =
   mutate(mc.1016.2013,
          Prop.R = R / (R + S),                         
-         G =       apply(mc.1016.2013[c("R", "S")], 1, Fun.G),
-         df =      apply(mc.1016.2013[c("R", "S")], 1, Fun.df),
+         G = apply(mc.1016.2013[c("R", "S")], 1, Fun.G),
+         df = apply(mc.1016.2013[c("R", "S")], 1, Fun.df),
          p.Value = apply(mc.1016.2013[c("R", "S")], 1, Fun.p)
   )
 # View data
