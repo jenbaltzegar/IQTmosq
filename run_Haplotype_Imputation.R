@@ -421,19 +421,19 @@ freqSR <- freqAll_long[freqAll_long$Haplotype=="SR", ]
 freqRS <- freqAll_long[freqAll_long$Haplotype=="RS", ]
 freqRR <- freqAll_long[freqAll_long$Haplotype=="RR", ]
 
-### Plot graph ------------------------------------------------------------
-source("R_Scripts/IQTmosq/plot_kdrHaps.R")
-# View plot
-kdrHaps
-
-# # Write plot to pdf
-# pdf(file = paste("figures/kdrHaps/kdrHaps_", Sys.Date(), ".pdf", sep = ""), 11, 8.5)
-# print(kdrHaps)
-# dev.off()
-
-# Write plot to png
-ggsave(filename = paste0("figures/kdrHaps/kdrHaps_bars/kdrHaps_", Sys.Date(), ".png"), width = 11, height = 8, dpi = 600, units = "in", device='png')
-
-
+# ### Plot graph ------------------------------------------------------------
+# source("R_Scripts/IQTmosq/plot_kdrHaps.R")
+# # View plot
+# kdrHaps
+# 
+# # # Write plot to pdf
+# # pdf(file = paste("figures/kdrHaps/kdrHaps_", Sys.Date(), ".pdf", sep = ""), 11, 8.5)
+# # print(kdrHaps)
+# # dev.off()
+# 
+# # Write plot to png
+# ggsave(filename = paste0("figures/kdrHaps/kdrHaps_bars/kdrHaps_", Sys.Date(), ".png"), width = 11, height = 8, dpi = 600, units = "in", device='png')
+# 
+# 
 
 
