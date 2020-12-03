@@ -2,6 +2,12 @@
 # Creates on file for each meltcurve locus + replicate combination
 # Started: 6/7/17
 
+#######
+# If you receive the following error -- 
+# "Error in file(file, "rt") : cannot open the connection' 
+# -- make sure all analysis files are available and named properly in MeltCurve folder"
+#######
+
 # 0 ################################################################################
 ### load required library
 library(gdata)
