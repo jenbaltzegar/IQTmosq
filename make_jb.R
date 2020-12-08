@@ -9,8 +9,8 @@ source("load_data_jb.R")
 # run data analysis scripts
 source("meltcurve_analysis.R")  # genotype/haplotype construction
 source("run_Haplotype_Imputation.R")  # create obj for plot_kdrHaps.R
-source("run_repeatedGtest_2013_V1016I.R") # repeated g-test for 2013
-source("run_repeatedGtest_2014_V1016I.R") # repeated g-test for 2014
+source("run_repeatedGtest_2013_V1016I.R") # report gtest.2013
+source("run_repeatedGtest_2014_V1016I.R") # report gtest.2014
 source("run_kdr_testHWE.R")     # HWE analysis 
 
 # create tables and figures for manuscript
