@@ -1,6 +1,12 @@
 # This file takes output from meltcurve analysis folders and concatenates it into six files
-# Creates on file for each meltcurve locus + replicate combination
+# Creates one file for each meltcurve locus + replicate combination
 # Started: 6/7/17
+
+#######
+# If you receive the following error -- 
+# "Error in file(file, "rt") : cannot open the connection' 
+# -- make sure all analysis files are available and named properly in MeltCurve folder"
+#######
 
 # 0 ################################################################################
 ### load required library
@@ -41,4 +47,6 @@ for (d in 1:length(wd)) {
                            , as.character(wd[d]), ".csv", sep = "")
             , row.names = F)  
 } # end setwd() loop
+
+setwd("~/Dropbox/GouldLab/Project_Mosquito/Database/R_Scripts/IQTmosq")
   

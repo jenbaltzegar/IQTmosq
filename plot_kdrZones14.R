@@ -91,11 +91,11 @@ kdrZones14 <- ggplot(mc.1016.t, aes(x=month, y=freqR)) +
 
 
 # View plot
-kdrZones14
+print(kdrZones14)
  
 # Write plot to png
 # ggsave(filename = paste0("figures/kdrZones/kdrZones_2014/kdrZones14_", Sys.Date(), ".png"), width = 11, height = 8, dpi = 600, units = "in", device='png')
-ggsave(filename = paste0("./data/kdrZones14_", Sys.Date(), ".png"), width = 11, height = 8, dpi = 600, units = "in", device='png')
+# ggsave(filename = paste0("./data/kdrZones14_", Sys.Date(), ".png"), width = 11, height = 8, dpi = 600, units = "in", device='png')
 
 # 
 # # Write plot to pdf

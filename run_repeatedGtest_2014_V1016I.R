@@ -1,45 +1,43 @@
 # This script performs a "Repeated G-Test" on 2014 V1016I data
 # Started 2 Aug 2017
+# depends on setup_jb.R and meltcurve_analysis.R
 
-# Prepare working environment
-rm(list = ls())
-setwd("/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database")
-# Load required libraries
-# RVAideMemoire manual at https://cran.r-project.org/web/packages/RVAideMemoire/index.html
-library(RVAideMemoire)
-library(dplyr)
+# # Required libraries
+# library(RVAideMemoire)
+# library(dplyr)
 
-# Load mc.1016.t and mc.1016.b data
-mc.1016.t <- read.csv("mc.1016.t.csv")
-mc.1016.b <- read.csv("mc.1016.b.csv")
+# # Load mc.1016.t and mc.1016.b data
+# mc.1016.t <- read.csv("mc.1016.t.csv")
+# mc.1016.b <- read.csv("mc.1016.b.csv")
 
-# 3/19/18 - Subset mc.1016.t to remove March data because sample size is too low, currently n = 4
-mc.1016.t <- mc.1016.t[-3,]
-mc.1016.b <- mc.1016.b[-3,]
+# rename objs to avoid overwriting
+mc.t14 <- mc.1016.t
+mc.b14 <- mc.1016.b
 
 # Add column for treatment type
 # for spray region
-list1 <- 1:9
-treatment <- rep("spray",length(list1))
-mc.1016.t <- cbind(mc.1016.t, treatment)
-mc.1016.t
+mc.t14 <- cbind(mc.t14, zone = rep("treatment"))
+mc.t14
 
 # for buffer region
-treatment <- rep("buffer", length(list1))
-mc.1016.b <- cbind(mc.1016.b, treatment)
-mc.1016.b
+mc.b14 <- cbind(mc.b14, zone = rep("buffer"))
+mc.b14
 
 # Combine the datasets
-mc.1016.2014 <- rbind(mc.1016.b, mc.1016.t)
-mc.1016.2014
+dat <- rbind(mc.b14, mc.t14)
+dat
 
-# Remove rows with NA
-mc.1016.2014 <- mc.1016.2014[complete.cases(mc.1016.2014), ]
+### G test should not be done on zero values. 
+# Set minimum observations
+.min.obs <- 5
+# Subset mc.t13 to remove months with samples size < 5
+dat <- subset(dat, n > .min.obs)
+dat
 
 # Calculate number of R and S alleles from genotype counts
-mc.1016.2014$R <- mc.1016.2014$SR + (2*mc.1016.2014$RR)
-mc.1016.2014$S <- mc.1016.2014$SR + (2*mc.1016.2014$SS)
-mc.1016.2014
+dat$R <- dat$SR + (2*dat$RR)
+dat$S <- dat$SR + (2*dat$SS)
+dat
 
 ############################################################
 # Notes about choosing expected proportions for G.tests
@@ -54,7 +52,10 @@ mc.1016.2014
 # This choice is in line three of the Fun.xx functions as ", p=c(meanFreqR, meanFreqS)"
 # Code to automatically update initial proportions, these are also the expected proportions for 
 # the pooled G-test
-meanFreqR = (mc.1016.2014$freqR[1] + mc.1016.2014$freqR[9])/2
+# meanFreqR = freq R in January buffer zone + freq R in January spray zone / 2
+
+meanFreqR = (dat$freqR[dat$month==1 & dat$zone=="buffer"] 
+             + dat$freqR[dat$month==1 & dat$zone=="treatment"])/2
 meanFreqS = 1 - meanFreqR
 
 ############################################################
@@ -87,15 +88,15 @@ Fun.p = function (Q){
 
 
 # Calculate proportion of R allele
-mc.1016.2014 =
-  mutate(mc.1016.2014,
+dat =
+  mutate(dat,
          Prop.R = R / (R + S),                         
-         G =       apply(mc.1016.2014[c("R", "S")], 1, Fun.G),
-         df =      apply(mc.1016.2014[c("R", "S")], 1, Fun.df),
-         p.Value = apply(mc.1016.2014[c("R", "S")], 1, Fun.p)
+         G =       apply(dat[c("R", "S")], 1, Fun.G),
+         df =      apply(dat[c("R", "S")], 1, Fun.df),
+         p.Value = apply(dat[c("R", "S")], 1, Fun.p)
   )
 # View data
-mc.1016.2014
+dat
 
 ############################################################
 # Heterogeneity G-test
@@ -103,11 +104,15 @@ mc.1016.2014
 # Ex: The proportion of R alleles is the same in different month*trt groups
 
 # Create a data matrix to run G-test for heterogeneity
-Data.matrix = as.matrix(mc.1016.2014[c("R", "S")])      
+Data.matrix = as.matrix(dat[c("R", "S")])      
 Data.matrix                                     
 
 # Heterogeneity
-G.test(Data.matrix) # Report this value                
+gtest.2014 <- G.test(Data.matrix)  
+
+####### Report this #######
+gtest.2014    
+###########################              
 
 ############################################################
 # Pooled G-test
@@ -115,8 +120,8 @@ G.test(Data.matrix) # Report this value
 # Ex: The number of R and S alles summed across month*trt group is equal to the expected proportions
 
 # Set up data for pooled G-test
-Total.R = sum(mc.1016.2014$R)                           
-Total.S = sum(mc.1016.2014$S)                           
+Total.R = sum(dat$R)                           
+Total.S = sum(dat$S)                           
 
 observed = c(Total.R, Total.S)
 expected = c(meanFreqR, meanFreqS)
@@ -128,8 +133,8 @@ G.test(x=observed, p=expected)
 # Ho: Data from individual experiments fit expectations
 
 # Set up data for total G-test
-Total.G  = sum(mc.1016.2014$G)                          
-Total.df = sum(mc.1016.2014$df)
+Total.G  = sum(dat$G)                          
+Total.df = sum(dat$df)
 
 # Run 
 Total.G                                       

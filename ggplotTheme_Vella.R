@@ -1,6 +1,5 @@
 # Code for Michael Vella's ggplot theme
 
-library(ggthemes)
 my_theme <- function(){
   theme_foundation(base_size=14) + 
     theme(

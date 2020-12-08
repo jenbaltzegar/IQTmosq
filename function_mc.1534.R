@@ -26,7 +26,7 @@ mc.1534 <- function(objectName){
   countSR = count1534[count1534$F1534C_converted=="SR", "countGenos"]
   countSS = count1534[count1534$F1534C_converted=="SS", "countGenos"]
   
-  # Convert counts to useable numbers
+  # Convert counts to usable numbers
   scalarRR = sum(countRR)
   scalarSR = sum(countSR)
   scalarSS = sum(countSS)

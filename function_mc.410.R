@@ -25,7 +25,7 @@ mc.410 <- function(objectName){
   countSR = count410[count410$V410L_converted=="SR", "countGenos"]
   countSS = count410[count410$V410L_converted=="SS", "countGenos"]
   
-  # Convert counts to useable numbers
+  # Convert counts to usable numbers
   scalarRR = sum(countRR)
   scalarSR = sum(countSR)
   scalarSS = sum(countSS)

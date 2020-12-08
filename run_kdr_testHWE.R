@@ -1,20 +1,13 @@
 # This script will parse kdr data and analyze for HWE
 
-# Prepare working environment
-# clear environment
-rm(list = ls())
-
-# set working directory
-setwd("/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database")
-
 # load libraries
-library(sqldf)
+# library(sqldf)
 library(genetics)
 library(metaseqR)
 
 
 # load data
-kdr <- read.csv("kdrData_reduced.csv")
+kdr <- read.csv("../../kdrData_reduced.csv")
 kdr$newDate <- as.Date(kdr$newDate)
 
 # remove rows where newDate is NA
@@ -32,8 +25,8 @@ kdr.moYr <- split(kdr, format(kdr$newDate, "%Y-%m"))
 # x <- split(kdr.moYr$'2004-04', kdr.moYr$'2004-04'$NEIGHBORHO)
 
 
-# Source function to calculate genotype frequencies 
-source("R_Scripts/IQTmosq/function_mc.1534.R")
+# # Source function to calculate genotype frequencies 
+# source("R_Scripts/IQTmosq/function_mc.1534.R")
 
 # calculate genotype frequencies for each Mo-Year
 genos <- lapply(kdr.moYr, mc.1534)
@@ -51,7 +44,7 @@ make.df <- function(df){
 # generate objects
 genos <- lapply(genos, make.df)
 
-# calculate HWD for each month+year group
+# calculate HWE for each month+year group
 oct.02 <- HWE.test(genos$`2002-10`)
 nov.02 <- HWE.test(genos$`2002-11`)
 dec.02 <- HWE.test(genos$`2002-12`)
