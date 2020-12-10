@@ -4,6 +4,7 @@
 
 # change directory
 cd ./WFABC
+
 # make directories
 mkdir -p ./results
 

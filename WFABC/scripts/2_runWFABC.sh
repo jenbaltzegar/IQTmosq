@@ -2,11 +2,9 @@
 
 # This script will run data through the WFABC pipeline
 
-# make sure WFABC_v1.1 is executable
-chmod +x 
 # set some params
-V1016I="./WFABC/V1016I_byMo_sel.txt"
-F1534C="./WFABC/F1534C_byMo_sel.txt"
+V1016I="./V1016I_byMo_sel.txt"
+F1534C="./F1534C_byMo_sel.txt"
 
 twoNe=1000
 min_s=0.0
