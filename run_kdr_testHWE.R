@@ -1,13 +1,8 @@
 # This script will parse kdr data and analyze for HWE
 
-# load libraries
-# library(sqldf)
-library(genetics)
-library(metaseqR)
 
-
-# load data
-kdr <- read.csv("../../kdrData_reduced.csv")
+# rename obj to avoid overwriting
+kdr <- kdrData
 kdr$newDate <- as.Date(kdr$newDate)
 
 # remove rows where newDate is NA
@@ -20,13 +15,6 @@ kdr <- kdr[kdr$newDate >= "2002-10-01" & kdr$newDate <= "2005-12-31",]
 
 # split kdr into month+year groups
 kdr.moYr <- split(kdr, format(kdr$newDate, "%Y-%m"))
-
-# # split dfs by Neighborhood values
-# x <- split(kdr.moYr$'2004-04', kdr.moYr$'2004-04'$NEIGHBORHO)
-
-
-# # Source function to calculate genotype frequencies 
-# source("R_Scripts/IQTmosq/function_mc.1534.R")
 
 # calculate genotype frequencies for each Mo-Year
 genos <- lapply(kdr.moYr, mc.1534)
@@ -97,16 +85,9 @@ months <- c("oct.02", "nov.02", "dec.02",
             "jan.03", "feb.03", "mar.03", "apr.03", "may.03", "jun.03", "jul.03", "aug.03", "sep.03", "oct.03", "nov.03", "dec.03",
             "jan.04", "feb.04", "mar.04", "may.04", "jun.04", "jul.04")
 
-kdr.pvals <- as.matrix(cbind(months, hwe.pvals))
+kdr.pvals <- as.data.frame(cbind(months, hwe.pvals))
+print(kdr.pvals)
 
-
-##########################################################
-##########################################################
-##########################################################
-# This part of the script will run Fisher's method for combining p-values
-# requires library(metaseqR)
-kdr.results <- fisher.method(t(as.matrix(hwe.pvals)))
-kdr.results
 
 
 

@@ -1,0 +1,76 @@
+# This script will read in all data and merge into one dataframe called kdrData
+
+# Prep data ---------------------------------------------------------------
+# Convert Date to readable form for R
+kdrData$newDate <- as.character(as.Date(as.character(kdrData$Date), format = "%m/%d/%Y"))
+# Note: If year starts with 00 after conversion, then go back and save IsolationLog_IQT-Mosq.csv
+# with Date column in the correct format (MM/DD/YYYY). Weird formating issues happen with .csv files
+
+# Left join masterdec GIS and neighborhood info onto kdrData
+kdrData <- merge(x=kdrData, y = masterdec[, c("X", "Y", "NEIGHBORHO", "LOC_CODE")]
+              , by.x = "Location_Code", by.y = "LOC_CODE" , all.x = TRUE)
+
+
+# Merge melt curve data with isolation log to create df "kdrData"
+# Rename column Genotype in each df
+colnames(merged1016_rep1)[4] <- "V1016I_rep1"
+colnames(merged1016_rep2)[4] <- "V1016I_rep2"
+colnames(merged1534_rep1)[4] <- "F1534C_rep1"
+colnames(merged1534_rep2)[4] <- "F1534C_rep2"
+colnames(merged410_rep1)[4] <- "V410L_rep1"
+colnames(merged410_rep2)[4] <- "V410L_rep2"
+
+# Left join merged data to kdrData
+kdrData <- merge(x = kdrData, y = merged1016_rep1[, c("mosquito_id", "V1016I_rep1")]
+                 , by = "mosquito_id", all.x = TRUE)
+kdrData <- merge(x = kdrData, y = merged1016_rep2[, c("mosquito_id", "V1016I_rep2")]
+                 , by = "mosquito_id", all.x = TRUE)
+kdrData <- merge(x = kdrData, y = merged1534_rep1[, c("mosquito_id", "F1534C_rep1")]
+                 , by = "mosquito_id", all.x = TRUE)
+kdrData <- merge(x = kdrData, y = merged1534_rep2[, c("mosquito_id", "F1534C_rep2")]
+                 , by = "mosquito_id", all.x = TRUE)
+kdrData <- merge(x = kdrData, y = merged410_rep1[, c("mosquito_id", "V410L_rep1")]
+                 , by = "mosquito_id", all.x = TRUE)
+kdrData <- merge(x = kdrData, y = merged410_rep2[, c("mosquito_id", "V410L_rep2")]
+                 , by = "mosquito_id", all.x = TRUE)
+
+
+# Add columns with verified replicated genotype or put error 
+kdrData$V1016I <- ifelse(kdrData$V1016I_rep1 == kdrData$V1016I_rep2
+                       , as.character(kdrData$V1016I_rep1)
+                       , "error")
+kdrData$F1534C <- ifelse(kdrData$F1534C_rep1 == kdrData$F1534C_rep2
+                         , as.character(kdrData$F1534C_rep1)
+                         , "error")
+kdrData$V410L <- ifelse(kdrData$V410L_rep1 == kdrData$V410L_rep2
+                         , as.character(kdrData$V410L_rep1)
+                         , "error")
+
+
+# Left join Zone information to kdrDate
+kdrData <- merge(x = kdrData, y = exptZone, by.x = "Location_Code", by.y = "location_code", all.x = TRUE)
+
+
+####
+# Key Code: Remove unknown location codes from kdrData and save file
+####
+# "Unknown" location codes are typically from mosquitoes collected by Steve Stoddard outside of IQT
+kdrData <- kdrData[kdrData$Location_Code != "unknown", ]
+# write.csv(kdrData,"~/Dropbox/GouldLab/Project_Mosquito/Database/kdrData_all_reduced.csv", row.names = F)
+
+
+# Convert melt curve output to readable genotype and haplotype
+# Uses function_convertMergedMeltCurve.R
+
+# Run function for each column
+kdrData$V1016I_converted <- convert1016(kdrData)
+kdrData$F1534C_converted <- convert1534(kdrData)
+kdrData$V410L_converted <- convert410(kdrData)
+
+# Create haplotype for loci 1016 and 1534 - 410 is not included here
+kdrData$haplotype <- paste0(kdrData$V1016I_converted, kdrData$F1534C_converted)
+
+### Save file
+# Write to file
+write.csv(kdrData, "./data/kdrData.csv", row.names = F)
+

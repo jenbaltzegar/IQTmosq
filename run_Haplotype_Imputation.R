@@ -5,9 +5,6 @@
 # This matrix assumes that RS does not exist in the population
 # Locus 1016 is always written first
 
-# # Required libraries
-# library(reshape2)
-
 ### Create matrix of haplotype probabilities ------------------------------------------------------------
 genos <- c("SSSS", "SSSR", "SSRR", "SRSS", "SRSR", "SRRR", "RRSS", "RRSR", "RRRR")
 haps <- c("SS", "SR", "RS", "RR")
@@ -25,7 +22,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2000 <- colSums(df[, c(1:4)])
 # Rename df
@@ -42,7 +38,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2001 <- colSums(df[, c(1:4)])
 # Rename df
@@ -59,7 +54,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2002 <- colSums(df[, c(1:4)])
 # Rename df
@@ -75,7 +69,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2003 <- colSums(df[, c(1:4)])
 # Rename df
@@ -91,7 +84,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2004 <- colSums(df[, c(1:4)])
 # Rename df
@@ -108,7 +100,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2005 <- colSums(df[, c(1:4)])
 # Rename df
@@ -124,7 +115,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2006 <- colSums(df[, c(1:4)])
 # Rename df
@@ -141,7 +131,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2007 <- colSums(df[, c(1:4)])
 # Rename df
@@ -158,7 +147,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2008 <- colSums(df[, c(1:4)])
 # Rename df
@@ -175,7 +163,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2009 <- colSums(df[, c(1:4)])
 # Rename df
@@ -191,7 +178,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2010 <- colSums(df[, c(1:4)])
 # Rename df
@@ -208,7 +194,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2011 <- colSums(df[, c(1:4)])
 # Rename df
@@ -224,7 +209,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2012 <- colSums(df[, c(1:4)])
 # Rename df
@@ -240,7 +224,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2013 <- colSums(df[, c(1:4)])
 # Rename df
@@ -256,7 +239,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2014 <- colSums(df[, c(1:4)])
 # Rename df
@@ -273,7 +255,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2015 <- colSums(df[, c(1:4)])
 # Rename df
@@ -290,7 +271,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2016 <- colSums(df[, c(1:4)])
 # Rename df
@@ -306,7 +286,6 @@ for(i in 1:9){
   df <- rbind(df, df.yr)
   names(df) <- c("SS", "SR", "RS", "RR", "Year")
 }
-# df
 # Create vector of haplotype sums for year
 sum2017 <- colSums(df[, c(1:4)])
 # Rename df
@@ -351,7 +330,7 @@ freqAll <- as.data.frame(freqAll)
 year <- 2000:2017
 freqAll <- cbind(freqAll, year)
 
-### Calculate 95% Confidence Interval (not for ribbon CIs) ------------------------------------------------------------
+### Calculate 95% Confidence Interval ------------------------------------------------------------
 ## for column 1: SS
 df <- data.frame()
 for(i in 1:18){
@@ -360,7 +339,6 @@ for(i in 1:18){
 }
 colnames(df) <- "CI_95"
 CI_95.SS <- df
-# CI_95.SS
 
 ## for column 2: SR
 df <- data.frame()
@@ -370,7 +348,6 @@ for(i in 1:18){
 }
 colnames(df) <- "CI_95"
 CI_95.SR <- df
-# CI_95.SR
 
 ## for column 3: RS
 df <- data.frame()
@@ -380,7 +357,6 @@ for(i in 1:18){
 }
 colnames(df) <- "CI_95"
 CI_95.RS <- df
-# CI_95.RS
 
 ## for column 4: RR
 df <- data.frame()
@@ -390,7 +366,6 @@ for(i in 1:18){
 }
 colnames(df) <- "CI_95"
 CI_95.RR <- df
-# CI_95.RR
 
 CI_95 <- rbind(CI_95.SS, CI_95.SR, CI_95.RS, CI_95.RR)
 

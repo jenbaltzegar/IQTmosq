@@ -2,43 +2,30 @@
 # Started 28 Mar 2018
 # depends on setup_jb.R and meltcurve_analysis.R
 
-# # Required libraries
-# library(RVAideMemoire)
-# library(dplyr)
-
-# # Load mc.1016.t13 and mc.1016.b13 data
-# mc.1016.t13 <- read.csv("../../mc.1016.t13_reduced.csv")
-# mc.1016.b13 <- read.csv("../../mc.1016.b13_reduced_expandedBuffer.csv")
-# # mc.1016.b13 <- read.csv("mc.1016.b13_reduced.csv")
 
 # rename objs to avoid overwriting
 mc.t13 <- mc.1016.t13
-mc.b13 <- mc.1016.b13
+mc.b13 <- mc.1016.b13.expanded
 
 # Add column for treatment type
 # for spray region
 mc.t13 <- cbind(mc.t13, zone = rep("treatment"))
-mc.t13
 
 # for buffer region
 mc.b13 <- cbind(mc.b13, zone = rep("buffer"))
-mc.b13
 
 # Combine the datasets
 dat <- rbind(mc.b13, mc.t13)
-dat
 
 ### G test should not be done on zero values. 
 # Set minimum observations
 .min.obs <- 5
 # Subset mc.t13 to remove months with samples size < 5
 dat <- subset(dat, n > .min.obs)
-dat
 
 # Calculate number of R and S alleles from genotype counts
 dat$R <- dat$SR + (2*dat$RR)
 dat$S <- dat$SR + (2*dat$SS)
-dat
 
 ############################################################
 # Notes about choosing expected proportions for G.tests
@@ -68,21 +55,18 @@ meanFreqS = 1 - meanFreqR
 # Functions to calculate individual G's, df's, and p-values
 Fun.G = function (Q){             
   G.test(x=c(Q["R"], Q["S"])
-         # , p=c(0.765377, 0.234623)
          , p=c(meanFreqR, meanFreqS)
   )$statistic                    
 }
 
 Fun.df = function (Q){
   G.test(x=c(Q["R"], Q["S"])
-         # , p=c(0.765377, 0.234623)
          , p=c(meanFreqR, meanFreqS)
   )$parameter
 }
 
 Fun.p = function (Q){
   G.test(x=c(Q["R"], Q["S"])
-         # , p=c(0.765377, 0.234623)
          , p=c(meanFreqR, meanFreqS)
   )$p.value
 }
@@ -96,58 +80,19 @@ dat =
          df =      apply(dat[c("R", "S")], 1, Fun.df),
          p.Value = apply(dat[c("R", "S")], 1, Fun.p)
   )
-# View data
-dat
 
 ############################################################
 # Heterogeneity G-test
-# Note: This is the test to report for these data
 # Ho: Relative proportions are equal across different experiments
 # Ex: The proportion of R alleles is the same in different month*trt groups
 
 # Create a data matrix to run G-test for heterogeneity
 Data.matrix = as.matrix(dat[c("R", "S")])      
-Data.matrix                                     
 
 # Heterogeneity
 gtest.2013 <- G.test(Data.matrix)  
 
 ####### Report this #######
-gtest.2013    
+print(gtest.2013)    
 ###########################
-
-############################################################
-# Pooled G-test
-# Ho: Pooled data fit expectations
-# Ex: The number of R and S alles summed across month*trt group is equal to the expected proportions
-
-# Set up data for pooled G-test
-Total.R = sum(dat$R)                           
-Total.S = sum(dat$S)                           
-
-observed = c(Total.R, Total.S)
-expected = c(meanFreqR, meanFreqS)
-
-G.test(x=observed, p=expected)
-
-############################################################
-# Total G-test
-# Ho: Data from individual experiments fit expectations
-
-# Set up data for total G-test
-Total.G  = sum(dat$G)                          
-Total.df = sum(dat$df)
-
-# Run 
-Total.G                                       
-Total.df
-
-pchisq(Total.G,
-       df= Total.df,
-       lower.tail=FALSE)
-
-
-
-
-
 

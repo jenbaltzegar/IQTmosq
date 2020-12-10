@@ -53,26 +53,13 @@ kdrData$V410L <- ifelse(kdrData$V410L_rep1 == kdrData$V410L_rep2
 kdrData <- merge(x = kdrData, y = exptZone, by.x = "Location_Code", by.y = "location_code", all.x = TRUE)
 
 
-# Create and save files with missing project_code
-# Those files with no Zone (i.e. project code) specified
-noZone <- kdrData[is.na(kdrData$project_code),]
-# write.csv(noZone, "noZone.csv", row.names = FALSE)
-
-# Those files with no Zone but with known location codes
-noZoneNoUnknowns <- noZone[noZone$Location_Code != "unknown",]
-# write.csv(noZoneNoUnknowns, "noZoneNoUnknowns.csv", row.names = FALSE)
-
-####
-# Key Code: Remove unknown location codes from kdrData and save file
-####
+# Remove unknown location codes from kdrData and save file
 # "Unknown" location codes are typically from mosquitoes collected by Steve Stoddard outside of IQT
 kdrData <- kdrData[kdrData$Location_Code != "unknown", ]
-write.csv(kdrData,"~/Dropbox/GouldLab/Project_Mosquito/Database/kdrData_all_reduced.csv", row.names = F)
 
 
 # Convert melt curve output to readable genotype and haplotype
 # Uses function_convertMergedMeltCurve.R
-
 # Run function for each column
 kdrData$V1016I_converted <- convert1016(kdrData)
 kdrData$F1534C_converted <- convert1534(kdrData)
@@ -80,12 +67,6 @@ kdrData$V410L_converted <- convert410(kdrData)
 
 # Create haplotype for loci 1016 and 1534 - 410 is not included here
 kdrData$haplotype <- paste0(kdrData$V1016I_converted, kdrData$F1534C_converted)
-
-# ### Save file
-# # Write to file
-# write.csv(kdrData, paste0("~/Dropbox/GouldLab/Project_Mosquito/Database/kdrData_reduced_archived/kdrData_reduced_", Sys.Date(), ".csv"), row.names = F)
-# write.csv(kdrData, "~/Dropbox/GouldLab/Project_Mosquito/Database/kdrData_reduced.csv", row.names = F)
-
 
 
 # Parse data for allele frequency analysis --------------------------------
@@ -454,23 +435,5 @@ mc.1016.b <- cbind(month, dfbuff)
 # mc.1016.t
 # mc.1016.b13
 # mc.1016.b
-
-
-# # Save dataframes ---------------------------------------------------------
-# # These are required for plots, selection coefficient, and other analyses
-# write.csv(mosq2014, file = "/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database/mosq2014.csv", row.names = F)
-# write.csv(mosq2013, file = "/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database/mosq2013.csv", row.names = F)
-# write.csv(mc.1016.yr, file = "/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database/mc.1016.yr_reduced.csv", row.names = F)
-# write.csv(mc.1534.yr, file = "/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database/mc.1534.yr_reduced.csv", row.names = F)
-# write.csv(mc.410.yr, file = "/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database/mc.410.yr_reduced.csv", row.names = F)
-# write.csv(mc.haps.yr, file = "/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database/mc.haps.yr_reduced.csv", row.names = F)
-# write.csv(mc.1016.mo13, file = "/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database/mc.1016.mo13_reduced.csv", row.names = F)
-# write.csv(mc.1016.mo, file = "/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database/mc.1016.mo_reduced.csv", row.names = F)
-# write.csv(mc.1534.mo13, file = "/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database/mc.1534.mo13_reduced.csv", row.names = F)
-# write.csv(mc.1534.mo, file = "/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database/mc.1534.mo_reduced.csv", row.names = F)
-# write.csv(mc.1016.t13, file = "/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database/mc.1016.t13_reduced.csv", row.names = F)
-# write.csv(mc.1016.t, file = "/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database/mc.1016.t_reduced.csv", row.names = F)
-# write.csv(mc.1016.b13, file = "/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database/mc.1016.b13_reduced.csv", row.names = F)
-# write.csv(mc.1016.b, file = "/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database/mc.1016.b_reduced.csv", row.names = F)
 
 

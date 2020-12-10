@@ -1,9 +1,6 @@
 # Plot the frequency of kdr haplotypes over time with ggplot()
 # depends on setup_jb.R and run_Haplotype_Imputation.R
 
-# # Required libraries
-# library(ggplot2)
-# library(RColorBrewer)
 
 # reassign Haplotypes to have specific text for legend
 levels(freqAll_long$Haplotype)[match("SS", levels(freqAll_long$Haplotype))] <- "Val1016/Phe1534"
@@ -79,8 +76,4 @@ kdrHaps <- ggplot(data = freqAll_long[!is.na(freqAll_long$Frequency),], aes(x=ye
 
 # Print graph to screen
 print(kdrHaps)
-
-# Write plot to png
-# ggsave(filename = paste0("~/Desktop/kdrHaps_options/", option, ".png"), width = 11, height = 8, dpi = 600, units = "in", device='png')
-# ggsave(filename = paste0("/Users/jenbaltz/Dropbox/GouldLab/Project_Mosquito/Database/figures/kdrHaps/kdrHaps_bars/kdrHaps_", Sys.Date(), ".png"), width = 11, height = 8, dpi = 600, units = "in", device='png')
 

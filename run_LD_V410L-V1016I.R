@@ -1,17 +1,5 @@
-# Prepare working environment ---------------------------------------------
-# set working directory
-setwd("~/Dropbox/GouldLab/Project_Mosquito/Database")
-
-# clear working environment
-rm(list = ls())
-
-# load libraries
-library(genetics)
-library(sqldf)
-
-
-# load data ---------------------------------------------
-kdr <- read.csv("~/Dropbox/GouldLab/Project_Mosquito/Database/kdrData_reduced.csv")
+# rename dataframe ---------------------------------------------
+kdr <- kdrData
 head(kdr)
 
 
@@ -138,10 +126,4 @@ LD.V410L <- cbind(year, LD.V410L)
 colnames(LD.V410L) <- c("year", "D'", "R^2", "X^2", "P-value", "n")
 LD.V410L <- as.data.frame(LD.V410L)
 
-write.csv(LD.V410L, "LD_V410L-V1016I.csv", row.names = FALSE)
-
-##############################################################################
-# # Remember these functions if want to look at multiple pairwise comparisons
-# # Run LD function
-# data <- makeGenotypes(data.frame(v1016, f1534, v410))
-# LD(data)
+print(LD.V410L)
