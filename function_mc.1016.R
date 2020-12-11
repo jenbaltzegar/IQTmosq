@@ -11,11 +11,20 @@
 # Apply to each year 
 
 mc.1016 <- function(objectName){
+
+  # omit rows with errors or NAs
+  objectName <- subset(objectName, 
+    !( 
+        grepl('error', V1016I_converted) 
+        | is.na(V1016I_converted)
+    )
+  )
+
+  ## subsetting with sqldf is sloooooow
   # Remove rows with errors
-  objectName <- sqldf(c("Delete from objectName where V1016I_converted like 'error'", "select * from objectName"))
-  
+  #objectName <- sqldf(c("Delete from objectName where V1016I_converted like 'error'", "select * from objectName"))
   # Remove rows with NAs
-  objectName <- sqldf("select * from objectName where V1016I_converted is not null")
+  #objectName <- sqldf("select * from objectName where V1016I_converted is not null")
   
   # Count genotypes per locus per year
   count1016 <- sqldf("select V1016I_converted, count (V1016I_converted) as countGenos from objectName group by V1016I_converted order by countGenos")
@@ -39,14 +48,13 @@ mc.1016 <- function(objectName){
   # Calculate 95% Confidence Interval
   CI_95 = 1.96 * sqrt((freqR*(1-freqR))/(2*n))
   
-  
   # # Create output
   # print("Genotype Summary Table")
   # print(count1016)
   
   # Create data frame of results
-  df <- data.frame(scalarRR, scalarSR, scalarSS, n, freqR, CI_95)
-  colnames(df) <- c("RR", "SR", "SS", "n", "freqR", "CI_95")
+  df <- data.frame(RR=scalarRR, SR=scalarSR, SS=scalarSS, n=n, freqR=freqR, CI_95=CI_95)
+  #colnames(df) <- c("RR", "SR", "SS", "n", "freqR", "CI_95")
   return(df)
 }
 

@@ -8,6 +8,7 @@ source("load_data_jb.R")
 
 # run data analysis scripts
 source("run_prepData.R")                    # merges data into one dataframe
+## slow
 source("run_meltcurve_analysis.R")          # genotype/haplotype construction - warning messages can be safely ignored
 source("run_Haplotype_Imputation.R")        # create obj for plot_kdrHaps.R
 source("run_repeatedGtest_2013_V1016I.R")   # report gtest.2013
@@ -28,7 +29,7 @@ system("./WFABC/scripts/run_WFABC_pipeline.sh") # ***need to add code to extract
 # Figure 6 - 
 # ***add Michael's script here***
 # Figure 7 - 
-# ***add xian's updated script***
+#source('plot_kdr.R')
 # Sup Table 1 - no script
 # Sup Figure 2 
 # ***add Michael's script here***

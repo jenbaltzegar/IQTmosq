@@ -12,11 +12,20 @@
 # Apply to each year 
 
 mc.1534 <- function(objectName){
+
+  # omit rows with errors or NAs
+  objectName <- subset(objectName, 
+    !( 
+        grepl('error', F1534C_converted) 
+        | is.na(F1534C_converted)
+    )
+  )
+
   # Remove rows with errors
-  objectName <- sqldf(c("Delete from objectName where F1534C_converted like 'error'", "select * from objectName"))
+  #objectName <- sqldf(c("Delete from objectName where F1534C_converted like 'error'", "select * from objectName"))
   
   # Remove rows with NAs
-  objectName <- sqldf("select * from objectName where F1534C_converted is not null")
+  #objectName <- sqldf("select * from objectName where F1534C_converted is not null")
   
   # Count genotypes per locus per year
   count1534 <- sqldf("select F1534C_converted, count (F1534C_converted) as countGenos from objectName group by F1534C_converted order by countGenos")

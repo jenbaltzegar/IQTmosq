@@ -4,12 +4,18 @@
 library(gdata)
 options(gsubfn.engine = "R") # prevents R from stalling while loading sqldf library
 library(sqldf)
+## ddply
+library(plyr)
 library(dplyr)
 library(reshape2) # for haplotype imputation
 library(ggplot2)
 library(ggthemes)
+## requires dependencies
+## see http://www.bioconductor.org/packages/release/bioc/html/mixOmics.html
 library(RVAideMemoire) # for repeated g-test
 library(genetics) # for LD analysis & HWE
+## for pipe: %.>%
+library(wrapr)
 
 
 # Source functions -----

@@ -26,6 +26,7 @@ mc.1534.byMo <- read.csv("../data/mc.1534.byMo.csv", header = TRUE)
 # source functions
 source("./scripts/function_createDF.R")
 
+##! subset by date
 # Restrict dfs for period of selection
 mc.1016.byMo.sel <- mc.1016.byMo[124:174,]   # 124:174 = Apr 2010 - Jun 2014 
 mc.1534.byMo.sel <- mc.1534.byMo[34:120,]    # 34:120 = Oct 2002 - Dec 2009
