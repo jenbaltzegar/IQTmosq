@@ -11,6 +11,7 @@
 # For 1534 Locus
 # Apply to each year 
 
+## depends on fun.ci in function_shared.R
 mc.1534 <- function(objectName){
 
   # omit rows with errors or NAs
@@ -47,7 +48,7 @@ mc.1534 <- function(objectName){
   freqR = (2*scalarRR + scalarSR)/(2*n)
   
   # Calculate 95% Confidence Interval
-  CI_95 = 1.96 * sqrt((freqR*(1-freqR))/(2*n))
+  CI_95 = fun.ci(freqR, n)
   
   # # Create output
   # print("Genotype Summary Table")

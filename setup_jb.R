@@ -4,8 +4,6 @@
 library(gdata)
 options(gsubfn.engine = "R") # prevents R from stalling while loading sqldf library
 library(sqldf)
-## ddply
-library(plyr)
 library(dplyr)
 library(reshape2) # for haplotype imputation
 library(ggplot2)
@@ -19,6 +17,8 @@ library(wrapr)
 
 
 # Source functions -----
+## functions used by other functions
+source("function_shared.R")
 source("function_convertMergedMeltCurve.R") # converts meltcurve output to genotypes
 # Source functions to create dataframe of genotype/haplotype counts
 source("function_mc.1016.R")

@@ -12,6 +12,7 @@ HapProbs <- matrix(data = c(1,0,0,0,0.5,0.5,0,0,0,1,0,0,1,0,0,0,0.33,0.33,0,0.33
        , nrow = 9, ncol = 4, byrow = T, dimnames = list(genos, haps))
 
 ### Impute haplotype numbers ------------------------------------------------------------
+##! FIXME: column indexes 2:10 
 # 2000
 df <- data.frame()
 # For each year, multiply the genotype number by the haplotype probability

@@ -16,10 +16,13 @@
 
 mc.haps <- function(objectName){
   # Remove rows with errors and NAs
-  objectName <- objectName[!(grepl("*error*", objectName$haplotype)), ]
-  objectName <- objectName[!(grepl("*NA*", objectName$haplotype)), ]
-  objectName <- objectName[!is.na(objectName$haplotype),]
-  
+  objectName <- subset(objectName,
+    !(
+        grepl("*error*", haplotype)
+        | grepl("*NA*", haplotype)
+        | is.na(haplotype)
+    )
+  )
   # Count genotypes per locus per year
   countHaps <- sqldf("select haplotype, count (haplotype) as countGenos from objectName group by haplotype order by countGenos")
   
@@ -67,6 +70,7 @@ mc.haps <- function(objectName){
   CI_95_SSSR = 1.96 * sqrt((freqSSSR*(1-freqSSSR))/(n))
   CI_95_SSRR = 1.96 * sqrt((freqSSRR*(1-freqSSRR))/(n))
   CI_95_SRSS = 1.96 * sqrt((freqSRSS*(1-freqSRSS))/(n))
+  ## Typo? SSSS in demom
   CI_95_SRSR = 1.96 * sqrt((freqSRSR*(1-freqSSSS))/(n))
   CI_95_SRRR = 1.96 * sqrt((freqSRRR*(1-freqSSSS))/(n))
   CI_95_RRSS = 1.96 * sqrt((freqRRSS*(1-freqRRSS))/(n))
@@ -80,7 +84,6 @@ mc.haps <- function(objectName){
   colnames(df) <- c("SSSS", "SSSR", "SSRR"
                     , "SRSS", "SRSR", "SRRR"
                     , "RRSS", "RRSR", "RRRR", "n")
-  
   return(df)
 }
 
