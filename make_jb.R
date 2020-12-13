@@ -10,7 +10,7 @@ source("load_data_jb.R")
 source("run_prepData.R")                    # merges data into one dataframe
 ## slow
 source("run_meltcurve_analysis.R")          # genotype/haplotype construction - warning messages can be safely ignored
-browser()
+#browser()
 source("run_Haplotype_Imputation.R")        # create obj for plot_kdrHaps.R
 source("run_repeatedGtest_2013_V1016I.R")   # report gtest.2013
 source("run_repeatedGtest_2014_V1016I.R")   # report gtest.2014
