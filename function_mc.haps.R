@@ -62,29 +62,21 @@ mc.haps <- function(objectName){
   freqRRSR = (scalarRRSR)/n
   freqRRRR = (scalarRRRR)/n
   
-  # Create vector to calculate 95% CI
-  haploFreq <- c(freqSSSS, freqSSSR, freqSSRR, freqSRSS, freqSRSR, freqSRRR, freqRRSS, freqRRSR, freqRRRR)
-  
-  # Calculate 95% Confidence Intervfor(i in 1:length(haploFreq)){
-  CI_95_SSSS = 1.96 * sqrt((freqSSSS*(1-freqSSSS))/(n))
-  CI_95_SSSR = 1.96 * sqrt((freqSSSR*(1-freqSSSR))/(n))
-  CI_95_SSRR = 1.96 * sqrt((freqSSRR*(1-freqSSRR))/(n))
-  CI_95_SRSS = 1.96 * sqrt((freqSRSS*(1-freqSRSS))/(n))
-  ## Typo? SSSS in demom
-  CI_95_SRSR = 1.96 * sqrt((freqSRSR*(1-freqSSSS))/(n))
-  CI_95_SRRR = 1.96 * sqrt((freqSRRR*(1-freqSSSS))/(n))
-  CI_95_RRSS = 1.96 * sqrt((freqRRSS*(1-freqRRSS))/(n))
-  CI_95_RRSR = 1.96 * sqrt((freqRRSR*(1-freqRRSR))/(n))
-  CI_95_RRRR = 1.96 * sqrt((freqRRRR*(1-freqRRRR))/(n))
-  
-  # Create data frame of results
-  df <- data.frame(scalarSSSS, scalarSSSR, scalarSSRR
-                   , scalarSRSS, scalarSRSR, scalarSRRR
-                   , scalarRRSS, scalarRRSR, scalarRRRR, n)
-  colnames(df) <- c("SSSS", "SSSR", "SSRR"
-                    , "SRSS", "SRSR", "SRRR"
-                    , "RRSS", "RRSR", "RRRR", "n")
-  return(df)
+    # Calculate 95% Confidence Intervfor(i in 1:length(haploFreq)){
+    result <- within(list(), {
+        SSSS <- fun.ci(freqSSSS,n)
+        SSSR <- fun.ci(freqSSSR,n)
+        SSRR <- fun.ci(freqSSRR,n)
+        SRSS <- fun.ci(freqSRSS,n)
+        SRSR <- fun.ci(freqSRSR,n)
+        SRRR <- fun.ci(freqSRRR,n)
+        RRSS <- fun.ci(freqRRSS,n)
+        RRSR <- fun.ci(freqRRSR,n)
+        RRRR <- fun.ci(freqRRRR,n)
+        n <- n
+    })
+
+    return(as.data.frame(result))
 }
 
 
