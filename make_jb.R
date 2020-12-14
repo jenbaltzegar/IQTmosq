@@ -12,9 +12,9 @@ source("run_prepData.R")                    # merges data into one dataframe
 source("run_meltcurve_analysis.R")          # genotype/haplotype construction - warning messages can be safely ignored
 #browser()
 source("run_Haplotype_Imputation.R")        # create obj for plot_kdrHaps.R
-source("run_repeatedGtest_2013_V1016I.R")   # report gtest.2013
-source("run_repeatedGtest_2014_V1016I.R")   # report gtest.2014
-source("run_kdr_testHWE.R")                 # HWE analysis  - errors due to fixation of one allele in a given month
+#source("run_repeatedGtest_2013_V1016I.R")   # report gtest.2013
+#source("run_repeatedGtest_2014_V1016I.R")   # report gtest.2014
+#source("run_kdr_testHWE.R")                 # HWE analysis  - errors due to fixation of one allele in a given month
 
 # create tables and figures for manuscript
 # Table 1 - no script
@@ -30,7 +30,7 @@ system("./WFABC/scripts/run_WFABC_pipeline.sh") # ***need to add code to extract
 # Figure 6 - 
 # ***add Michael's script here***
 # Figure 7 - 
-#source('plot_kdr.R')
+source('plot_kdr.R')
 # Sup Table 1 - no script
 # Sup Figure 2 
 # ***add Michael's script here***

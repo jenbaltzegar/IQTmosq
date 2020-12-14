@@ -53,11 +53,8 @@ kdrHaps <- ggplot(data = freqAll_long[!is.na(freqAll_long$Frequency),], aes(x=ye
   geom_line(aes(colour=Haplotype), size = 2) +
   geom_point(aes(colour=Haplotype), size = 3) +
   geom_errorbar(data = freqAll_long, aes(ymin=Frequency-CI_95, ymax=Frequency+CI_95, colour=Haplotype), width=.2, size = 0.7) +
-  
   ### Add Legends
   colScale 
   
-
 # Print graph to screen
-print(kdrHaps)
-
+#print(kdrHaps)

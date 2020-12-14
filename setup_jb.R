@@ -4,6 +4,7 @@
 library(gdata)
 options(gsubfn.engine = "R") # prevents R from stalling while loading sqldf library
 library(sqldf)
+library(plyr)
 library(dplyr)
 library(reshape2) # for haplotype imputation
 library(ggplot2)
@@ -14,6 +15,7 @@ library(RVAideMemoire) # for repeated g-test
 library(genetics) # for LD analysis & HWE
 ## for pipe: %.>%
 library(wrapr)
+library(emmeans)
 
 
 # Source functions -----
