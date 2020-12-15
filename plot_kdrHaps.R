@@ -1,25 +1,23 @@
 # Plot the frequency of kdr haplotypes over time with ggplot()
 # depends on setup_jb.R and run_Haplotype_Imputation.R
 
-
-##! TODO: check factor order
+## subset and modify
+freq_plot <- subset(freqAll_long, !is.na(Frequency))
 # reassign Haplotypes to have specific text for legend
-levels(freqAll_long$Haplotype)[match("SS", levels(freqAll_long$Haplotype))] <- "Val1016/Phe1534"
-levels(freqAll_long$Haplotype)[match("SR", levels(freqAll_long$Haplotype))] <- "Val1016/Cys1534"
-levels(freqAll_long$Haplotype)[match("RS", levels(freqAll_long$Haplotype))] <- "Ile1016/Phe1534"
-levels(freqAll_long$Haplotype)[match("RR", levels(freqAll_long$Haplotype))] <- "Ile1016/Cys1534"
-
-
+freq_plot$Haplotype  <- factor(freq_plot$Haplotype,
+    levels = c('SS','SR', 'RS', 'RR'),
+    labels = c("Val1016/Phe1534", "Val1016/Cys1534", "Ile1016/Phe1534", "Ile1016/Cys1534")
+)
+ 
 # Create custom color palettes -----
 hapColors <- c("#117733", "#332288", "#CC6677", "#882255")
-names(hapColors) <- rev(levels(freqAll_long$Haplotype))
+#names(hapColors) <- rev(levels(freq_plot$Haplotype))
 colScale <- scale_colour_manual(name = "Haplotype",values = hapColors)
 
 sprayColors <- c("#A0A0A0", "#D1D1D1","#BBBBBB", "#E6E6E6", "#7F7F7F", "#FFFFFF")
 
-
 # Plot kdr Haplotypes -----
-kdrHaps <- ggplot(data = freqAll_long[!is.na(freqAll_long$Frequency),], aes(x=year, y=Frequency)) +
+kdrHaps <- ggplot(data = freq_plot, aes(x=year, y=Frequency)) +
   my_theme() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + # modify theme
   labs(x = "Year", y = "Frequency"
@@ -27,7 +25,7 @@ kdrHaps <- ggplot(data = freqAll_long[!is.na(freqAll_long$Frequency),], aes(x=ye
        #, subtitle = option
        ) +
   scale_y_continuous(limits=c(-0.05, 1.05), breaks=c(0.0,0.2, 0.4, 0.6, 0.8, 1.0)) +
-  scale_x_continuous(breaks = pretty(freqAll_long$year, n = 18)) +
+  scale_x_continuous(breaks = pretty(freq_plot$year, n = 18)) +
   ### Add background to represent type of insecticides used 
   annotate("rect", xmin = 1999.0, xmax = 2001.5, ymin = -Inf, ymax = Inf, alpha=0.15, fill="grey") + # No pyrethroids
   annotate("rect", xmin = 2001.5, xmax = 2007.5, ymin = -Inf, ymax = Inf, alpha=0.15, fill="red") + # Delatmethrin 2002 - 2007
@@ -52,7 +50,13 @@ kdrHaps <- ggplot(data = freqAll_long[!is.na(freqAll_long$Frequency),], aes(x=ye
   ### Add data
   geom_line(aes(colour=Haplotype), size = 2) +
   geom_point(aes(colour=Haplotype), size = 3) +
-  geom_errorbar(data = freqAll_long, aes(ymin=Frequency-CI_95, ymax=Frequency+CI_95, colour=Haplotype), width=.2, size = 0.7) +
+  geom_errorbar(data = freq_plot, aes(ymin=Frequency-CI_95, ymax=Frequency+CI_95, colour=Haplotype), width=.2, size = 0.7) +
+  ## 2-column legend on top
+  theme(
+    legend.position='top', 
+    legend.direction='horizontal'
+  ) + 
+  guides(color=guide_legend(ncol=2)) +
   ### Add Legends
   colScale 
   

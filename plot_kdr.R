@@ -92,7 +92,8 @@ kdrZones <- (
   #Add data
   geom_point(size = 5) +
   geom_line(size = 2) +
-  geom_errorbar(width=.2,  size = 0.7) +
+  ## width in units of days
+  geom_errorbar(width=4,  size = 0.7) +
   geom_text( 
     ## treatment above buffer
     aes(y=(0.0 + 0.05*(zone=='treatment'))),
