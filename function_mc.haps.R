@@ -25,58 +25,22 @@ mc.haps <- function(objectName){
   )
   # Count genotypes per locus per year
   countHaps <- sqldf("select haplotype, count (haplotype) as countGenos from objectName group by haplotype order by countGenos")
-  
-  # Subset countHaps on haplotypes
-  countSRSR = countHaps[countHaps$haplotype=="SRSR", "countGenos"]
-  countRRSS = countHaps[countHaps$haplotype=="RRSS", "countGenos"]
-  countSRSS = countHaps[countHaps$haplotype=="SRSS", "countGenos"]
-  countSSSR = countHaps[countHaps$haplotype=="SSSR", "countGenos"]
-  countSSRR = countHaps[countHaps$haplotype=="SSRR", "countGenos"]
-  countSRRR = countHaps[countHaps$haplotype=="SRRR", "countGenos"]
-  countSSSS = countHaps[countHaps$haplotype=="SSSS", "countGenos"]
-  countRRRR = countHaps[countHaps$haplotype=="RRRR", "countGenos"]
-  countRRSR = countHaps[countHaps$haplotype=="RRSR", "countGenos"]
-  
-  # Convert counts to useable numbers
-  scalarSRSR = sum(countSRSR)
-  scalarRRSS = sum(countRRSS)
-  scalarSRSS = sum(countSRSS)
-  scalarSSSR = sum(countSSSR)
-  scalarSSRR = sum(countSSRR)
-  scalarSRRR = sum(countSRRR)
-  scalarSSSS = sum(countSSSS)
-  scalarRRRR = sum(countRRRR)
-  scalarRRSR = sum(countRRSR)
-  
-  # Calculate N
-  n = scalarSSSS + scalarSSSR + scalarSSRR + scalarSRSS + scalarSRSR + scalarSRRR + scalarRRSS + scalarRRSR + scalarRRRR
-  
-  # Calculate frequency of R allele
-  freqSSSS = (scalarSSSS)/n
-  freqSSSR = (scalarSSSR)/n
-  freqSSRR = (scalarSSRR)/n
-  freqSRSS = (scalarSRSS)/n
-  freqSRSR = (scalarSRSR)/n
-  freqSRRR = (scalarSRRR)/n
-  freqRRSS = (scalarRRSS)/n
-  freqRRSR = (scalarRRSR)/n
-  freqRRRR = (scalarRRRR)/n
-  
-    # Calculate 95% Confidence Intervfor(i in 1:length(haploFreq)){
-    result <- within(list(), {
-        SSSS <- fun.ci(freqSSSS,n)
-        SSSR <- fun.ci(freqSSSR,n)
-        SSRR <- fun.ci(freqSSRR,n)
-        SRSS <- fun.ci(freqSRSS,n)
-        SRSR <- fun.ci(freqSRSR,n)
-        SRRR <- fun.ci(freqSRRR,n)
-        RRSS <- fun.ci(freqRRSS,n)
-        RRSR <- fun.ci(freqRRSR,n)
-        RRRR <- fun.ci(freqRRRR,n)
-        n <- n
-    })
 
-    return(as.data.frame(result))
+  ## get counts for each type (0 if not found)
+  types <- c(
+    "SSSS", "SSSR", "SSRR", 
+    "SRSS", "SRSR", "SRRR", 
+    "RRSS", "RRSR", "RRRR"
+  )
+  result <- lapply(types, function(name) {
+    ## sum treats missing values as zero
+    sum(subset(countHaps, haplotype==name)$countGenos)
+  })
+  ## set column names
+  names(result) <- types
+  ## totals
+  result$n <- sum(countHaps$countGenos)
+  return(as.data.frame(result))
 }
 
 
