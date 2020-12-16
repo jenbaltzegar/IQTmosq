@@ -14,17 +14,6 @@ make.df <- function(df){
   return(g1)
 }
 
-make.df <- function(df){
-  x <- NULL
-  df <- as.data.frame(df)
-  g1   <- c(rep("R/R",df$RR[i]),
-            rep("R/S",df$SR[i]),
-            rep("S/S",df$SS[i]))
-  g1<-genotype(g1)
-  x <- rbind(x, g1)
-  return(x)
-}
-
 ############## test space ############## 
 # make.df <- function(df){
 #   for (i in 1:nrow(df)) {
