@@ -5,21 +5,6 @@
 kdr <- kdrData
 kdr$newDate <- as.Date(kdr$newDate)
 
-# remove rows where newDate is NA
-kdr <- kdr[complete.cases(kdr$newDate),]
-
-# restrict df from Oct 2002 - Dec 2005 
-kdr <- kdr[kdr$newDate >= "2002-10-01" & kdr$newDate <= "2005-12-31",]
-# # remove unnecessary columns
-# kdr <- kdr[, c(1:3,11,14,25:28)]
-
-# split kdr into month+year groups
-kdr.moYr <- split(kdr, format(kdr$newDate, "%Y-%m"))
-
-# calculate genotype frequencies for each Mo-Year
-genos <- lapply(kdr.moYr, mc.1534)
-
-
 # Write function to generate genotype object for HWE.test
 make.df <- function(df){
   g1   <- c(rep("R/R",df$RR),
@@ -29,8 +14,74 @@ make.df <- function(df){
   return(g1)
 }
 
-# generate objects
-genos <- lapply(genos, make.df)
+make.df <- function(df){
+  x <- NULL
+  df <- as.data.frame(df)
+  g1   <- c(rep("R/R",df$RR[i]),
+            rep("R/S",df$SR[i]),
+            rep("S/S",df$SS[i]))
+  g1<-genotype(g1)
+  x <- rbind(x, g1)
+  return(x)
+}
+
+############## test space ############## 
+# make.df <- function(df){
+#   for (i in 1:nrow(df)) {
+#     x <- rep("R/R",df$RR[i])
+#     y <- rep("R/S",df$SR[i])
+#     z <- rep("S/S",df$SS[i])
+#     print(x)
+#   }
+# }
+# 
+# 
+# g1   <- c(rep("R/R",df$RR),
+#           rep("R/S",df$SR),
+#           rep("S/S",df$SS))
+# g1<-genotype(g1)
+# return(g1)
+# }
+
+df <- (kdr
+  %>% filter(!is.na(newDate), newDate >= "2002-10-01" & newDate <= "2005-12-31")
+  %>% mutate(month = format(newDate, "%m"), year = format(newDate, "%Y"))
+  %>% group_by(year, month)
+  %>% group_modify(~mc.1534(.x))
+  %>% filter(n > 5)
+)
+df
+
+
+# apply function
+genos <- lapply(as.data.frame(df), make.df)
+
+
+######################################## 
+# 
+# 
+# 
+# # remove rows where newDate is NA
+# kdr <- kdr[complete.cases(kdr$newDate),]
+# 
+# # restrict df from Oct 2002 - Dec 2005
+# kdr <- kdr[kdr$newDate >= "2002-10-01" & kdr$newDate <= "2005-12-31",]
+# # # remove unnecessary columns
+# # kdr <- kdr[, c(1:3,11,14,25:28)]
+# 
+# # split kdr into month+year groups
+# kdr.moYr <- split(kdr, format(kdr$newDate, "%Y-%m"))
+# 
+# # calculate genotype frequencies for each Mo-Year
+# genos <- lapply(kdr.moYr, mc.1534)
+# 
+# 
+# # generate objects
+# genos <- lapply(genos, make.df)
+###########################################
+# test space
+
+###########################################
 
 # calculate HWE for each month+year group
 oct.02 <- HWE.test(genos$`2002-10`)
