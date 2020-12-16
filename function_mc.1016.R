@@ -12,16 +12,8 @@
 
 ## depends on fun.ci in function_shared.R
 mc.1016 <- function(objectName){
+  ## assumes no NAs or 'error' (handled in sql)
 
-  # omit rows with errors or NAs
-  objectName <- subset(objectName, 
-    !( 
-        grepl('error', V1016I_converted) 
-        | is.na(V1016I_converted)
-    )
-  )
-
-  ## subsetting with sqldf is sloooooow
   # Remove rows with errors
   #objectName <- sqldf(c("Delete from objectName where V1016I_converted like 'error'", "select * from objectName"))
   # Remove rows with NAs
