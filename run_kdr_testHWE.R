@@ -15,23 +15,7 @@ make.df <- function(df){
 }
 
 ############## test space ############## 
-# make.df <- function(df){
-#   for (i in 1:nrow(df)) {
-#     x <- rep("R/R",df$RR[i])
-#     y <- rep("R/S",df$SR[i])
-#     z <- rep("S/S",df$SS[i])
-#     print(x)
-#   }
-# }
-# 
-# 
-# g1   <- c(rep("R/R",df$RR),
-#           rep("R/S",df$SR),
-#           rep("S/S",df$SS))
-# g1<-genotype(g1)
-# return(g1)
-# }
-
+# apply mc.1534 to mo+yr combos for specified date range
 df <- (kdr
   %>% filter(!is.na(newDate), newDate >= "2002-10-01" & newDate <= "2005-12-31")
   %>% mutate(month = format(newDate, "%m"), year = format(newDate, "%Y"))
@@ -41,14 +25,14 @@ df <- (kdr
 )
 df
 
-
-# apply function
+# apply function - this does not work
+# need to apply function to each row of df instead of item of list
 genos <- lapply(as.data.frame(df), make.df)
 
 
 ######################################## 
 # 
-# 
+# ## original code
 # 
 # # remove rows where newDate is NA
 # kdr <- kdr[complete.cases(kdr$newDate),]
@@ -67,10 +51,7 @@ genos <- lapply(as.data.frame(df), make.df)
 # 
 # # generate objects
 # genos <- lapply(genos, make.df)
-###########################################
-# test space
 
-###########################################
 
 # calculate HWE for each month+year group
 oct.02 <- HWE.test(genos$`2002-10`)
