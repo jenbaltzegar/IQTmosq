@@ -5,11 +5,15 @@
 kdr <- kdrData
 kdr$newDate <- as.Date(kdr$newDate)
 
-# remove rows where newDate is NA
-kdr <- kdr[complete.cases(kdr$newDate),]
+kdr <- subset(kdr, 
+    # remove rows where newDate is NA
+    !is.na(newDate)
+    # restrict df from Oct 2002 - Dec 2005 
+    & (newDate >= "2002-10-01" & newDate <= "2005-12-31"),
+    select=c(newDate, F1534C_converted)
+)
 
-# restrict df from Oct 2002 - Dec 2005 
-kdr <- kdr[kdr$newDate >= "2002-10-01" & kdr$newDate <= "2005-12-31",]
+##! remove columns by name, not position
 # # remove unnecessary columns
 # kdr <- kdr[, c(1:3,11,14,25:28)]
 
