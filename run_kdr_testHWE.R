@@ -6,6 +6,7 @@ kdr <- kdrData
 kdr$newDate <- as.Date(kdr$newDate)
 
 # Write function to generate genotype object for HWE.test
+# this is the original function. I attempted to edit it without success.
 make.df <- function(df){
   g1   <- c(rep("R/R",df$RR),
             rep("R/S",df$SR),
@@ -28,6 +29,10 @@ df
 # apply function - this does not work
 # need to apply function to each row of df instead of item of list
 genos <- lapply(as.data.frame(df), make.df)
+
+# to do next:
+# 1. apply HWE.test to each mo+yr combo
+# 2. extract p-value from each mo+yr combo and create kdr.pvals
 
 
 ######################################## 
