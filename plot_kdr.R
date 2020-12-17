@@ -2,9 +2,7 @@
 
 ## process data: 
 ## minimum observations per month
-.min.obs <- 5
-## list months of year
-.months <- format(ISOdate(2004,1:12,1),"%B")
+.min.obs <- 1
 ## helper function
 mk.date <- function(yr, mon, day=1) as.Date(paste(yr, mon, day, sep='-'))
 
@@ -14,8 +12,8 @@ mc.1016.sub <-  (
     ## add columns
     %.>% within(., {
         date <- mk.date(year, month)
-        ## use factor for glm
-        fmonth <- factor(.months[as.numeric(month)], levels=.months)
+        ## use factor for glm (ANOVA, not slope)
+        fmonth <- factor(month)
         n.allele <- 2*n
     })
 )
@@ -34,18 +32,27 @@ kdr.mod <- dlply(mc.1016.sub, 'year', function(dat) {
     )
     list(mod=mod, emm=emm, contr=contr)
 })
+
 ## pull out contrasts, combine years
 kdr.mod.contr <- (
     ldply( kdr.mod, function(yr) yr$contr, .id='year')
     %.>% within(., {
-        month <- match(fmonth, .months)
-        date <- mk.date(year, month)
+        date <- mk.date(year, as.character(fmonth))
     })
 )
+
+## pull out glm CI
+kdr.mod.ci <- (
+    ldply( kdr.mod, function(yr) as.data.frame(yr$emm), .id='year')
+    %.>% within(., {
+        date <- mk.date(year, as.character(fmonth))
+    })
+)
+mc.1016.sub <- merge(mc.1016.sub, kdr.mod.ci)  
         
 kdrZones <- (
   ggplot(mc.1016.sub, 
-    aes(x=date, y=freqR, color=zone, ymin=freqR-CI_95, ymax=freqR+CI_95, label=n)
+    aes(x=date, y=freqR, color=zone, ymin=asymp.LCL, ymax=asymp.UCL, label=n)
   ) +
   facet_grid( ~ year, scale='free_x', space='free_x') +
   labs(x = "Month", y = "Frequency") +
@@ -91,7 +98,7 @@ kdrZones <- (
   )+
   #Add data
   geom_point(size = 5) +
-  geom_line(size = 2) +
+  #geom_line(size = 2) +
   ## width in units of days
   geom_errorbar(width=4,  size = 0.7) +
   geom_text( 
@@ -103,8 +110,9 @@ kdrZones <- (
   #xlim(c(1,11)) +
   ## label by month (%B is full month)
   scale_x_date(date_breaks = '1 month', date_labels='%b') +
-  my_theme()
-  + theme(
+  #my_theme() +
+  theme_bw() +
+  theme(
     legend.position=c(0.95, 0.2),
     ## bottom-left corner
     legend.justification=c(1,0)
