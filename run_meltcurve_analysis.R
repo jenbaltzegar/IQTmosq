@@ -60,7 +60,7 @@ dat.zone <- sqldf("
 
 ## 
 .id.x <- with(dat.zone, 
-    year==2013 & zone != 'treatment'
+    year==2013 & zone == 'other'
 )
 ## indentify 2013 "expanded buffer"
 dat.zone <- within(dat.zone, {
