@@ -18,38 +18,29 @@ dat <- read.csv(paste0('mc.',locus,'.MoYr_reduced_byMonth.csv'))
 dat <- cbind(dat,colsplit(as.character(dat$MonthYear),"-",c("month","year")))
 dat$year <- dat$year+2000
 dat$gen <- seq_len(nrow(dat))
-
 start_gen <- 34
-end_gen <- 12*7
-
-start_gen <- 9
-end_gen <- nrow(dat)
-
-start_gen <- 124
-end_gen <- 12*15
-
-end_gen <- 170
-end_gen <- 200
+end_gen <- 120
 tend <- end_gen - start_gen + 1
 
 #subset data by specified generations 
 estim_dat <- dat[dat$gen >= start_gen & dat$gen <= end_gen,genotype_names] #genotype columns only
 subs_dat <- dat[dat$gen >= start_gen & dat$gen <= end_gen,] #all columns
+subs_dat2 <- dat[dat$gen <= end_gen,] #all columns
 
 # choose parameters to estimate. fitness parameters, initial R allele frequency
 # set parameters to appropriate constant if not in parnames (not going to estimate)
 # popsize is only used in stochastic simulations
 theta1 <- c("sSS"=0.3,"h"=0.05,"r0"=0.01,"popsize"=500)
 parnames <- c("sSS","h")
-parnames <- c("sSS","h","r0")
+# parnames <- c("sSS","h","r0")
 theta1["r0"] <- dat$freqR[start_gen]
-theta1["r0"] <- 0.01
+# theta1["r0"] <- 0.01
 
 # maximum likelihood estimate from function in model_setup.R
 fit <- get_MLE(estim_dat,theta1,parnames)
 fit
 theta_fit_dat <- fit[names(theta1)]
-
+# theta_fit_dat['popsize'] <- 200
 # run deterministic simulation with MLE parameters
 simdat <- WF_sim(theta=theta_fit_dat,n_gens=tend,stoch_on=0) %>%
   as.data.frame()
@@ -65,20 +56,16 @@ names(bootout) <- parnames
 theta_boot <- theta_fit_dat
 all_s_dat <- list()
 for (i in 1:nrow(bootout)){
-  s_dat <- WF_sampler(WF_sim(theta=theta_boot,n_gens=tend,stoch_on=0),
+  s_dat <- WF_sampler(WF_sim(theta=theta_boot,n_gens=tend,stoch_on=1),
                       rowSums(estim_dat))
   #condition on simulations that R allele doesn't fall out of the population
   #(not necessary if using deterministic simulation)
-  if(s_dat[max(which(rowSums(estim_dat)>0)),"RR"]>0){
-    p <- rep(0.3,length(parnames))
-    sol <- optim(par=transto(p),fn=val_func,theta=theta_boot,parnames=parnames,dat=s_dat,control=list(maxit=2000))
-    # sol <- optim(par=transto(p),fn=val_func,theta=theta4,parnames=parnames,dat=s_dat,control=list(maxit=2000))
-    names(sol$par) <- parnames
-    paramfit_temp <- transfrom(sol$par)
+  # if(s_dat[max(which(rowSums(estim_dat)>0)),"RR"]>0){
+    paramfit_temp <- get_MLE(s_dat,theta_boot,parnames)
     bootout[i,parnames] <- paramfit_temp[parnames]
-  }else{
-    bootout[i,parnames] <- rep(NA,length(parnames))
-  }
+  # }else{
+  #   bootout[i,parnames] <- rep(NA,length(parnames))
+  # }
   s_dat$simnum <- i
   s_dat$gen <- seq(start_gen,end_gen)
   all_s_dat[[i]] <- s_dat
@@ -114,19 +101,21 @@ boot_boxplot
 
 grid.arrange(boot_pairplot,boot_boxplot,nrow=1)
 
-
 ####### produce fits for different fixed parameters
 # choose parameters to vary over (h set to vary)
 parvals1 <- expand.grid("start_gen" = start_gen,
                         "end_gen" = end_gen,
-                        "h"=as.vector(c(seq(0,1,.25),theta_fit_dat["h"])),
+                        "h"=as.vector(c(seq(0,1,.25))),#,theta_fit_dat["h"])),
                         "sSS" = as.vector(theta_fit_dat["sSS"]),
-                        "r0" = as.vector(theta_fit_dat["r0"])
+                        # "sSS" = 0.8,
+                        "r0" = 0.02
+                        # "r0" = as.vector(theta_fit_dat["r0"])
                         )
 
 # choose parameters to estimate
 parnames_temp <- c("sSS")
-parnames_temp <- c("sSS","r0")
+parnames_temp <- c("r0")
+# parnames_temp <- c("sSS","r0")
 
 fits_df <- foreach(x=iter(parvals1,by="row"), .combine=rbind,.packages=c("magrittr")) %do% {
   theta_temp <- c("sSS"=x[["sSS"]],"h"=x[["h"]],"r0"=x[["r0"]],"popsize"=500)
@@ -136,7 +125,8 @@ fits_df <- foreach(x=iter(parvals1,by="row"), .combine=rbind,.packages=c("magrit
              sSS = par_fit["sSS"],h=par_fit["h"],r0=par_fit["r0"])
 }
 fits_df$num <- seq_len(nrow(fits_df))
-
+fits_df$sSS <- 0.8
+fits_df$r0 <- 0.02
 # run simulations for each row of parameter vales
 all_simdat <- foreach(x=iter(fits_df,by="row"),.combine=rbind,.packages=c("magrittr")) %do% {
   tend <- x[["end_gen"]] - x[["start_gen"]] + 1
@@ -161,7 +151,7 @@ simdat_plot <- all_simdat %>% na.omit() %>%
 simdat_plot$h <- as.factor(round(simdat_plot$h,3))
 
 #set up data to plot
-dat_plot <- subs_dat
+dat_plot <- subs_dat2
 dat_plot[,genotype_names] <- dat_plot[,genotype_names]/rowSums(dat_plot[,genotype_names])
 max_samp_size_plotted <- 300
 dat_plot$n[dat_plot$n>max_samp_size_plotted] <- max_samp_size_plotted
@@ -176,10 +166,13 @@ year_breaks <- seq(min(which(dat$year==min(dat[dat$month=="Jan","year"]))),
 #need to modify for in the case that theta_fit_dat["h"] == h value in expand.grid
 vir_colors <- viridis(5)
 which_fit_val <- which(levels(simdat_plot$h)==round(theta_fit_dat["h"],3)) #make proper line stand out
-my_colors <- append(vir_colors,"red",which_fit_val-1)
-mysizes <- append(rep(1.5,5),2,which_fit_val-1)
-myalpha <- append(rep(0.6,5),1,which_fit_val-1)
-mylinetypes <- append(rep("dashed",5),"solid",which_fit_val-1)
+my_colors <- vir_colors
+mysizes <- rep(1.5,5)
+myalpha <- rep(0.8,5)
+# my_colors <- append(vir_colors,"red",which_fit_val-1)
+# mysizes <- append(rep(1.5,5),2,which_fit_val-1)
+# myalpha <- append(rep(0.6,5),1,which_fit_val-1)
+# mylinetypes <- append(rep("dashed",5),"solid",which_fit_val-1)
 
 #To do: move facet labels to left-hand side: R allele frequency/ RR frequency, SR....
 #       ***legend may need adjustment***. needs to move if plotting genotype frequencies
@@ -197,7 +190,7 @@ simplot <- simdat_plot %>% #subset(h>0.7) %>%
   scale_size(name="sample\n size", #need to manually change currently
              labels=c(0,100,200,expression("">=300)))+
   
-  # facet_grid(genotype ~ .,scales = "free_y") +
+  facet_grid(genotype ~ .)+#,scales = "free_y") +
   
   scale_y_continuous(expand = c(0.03,0))+
   scale_x_continuous(name = "Year",breaks = dat$gen[year_breaks],labels = dat$year[year_breaks]) +
@@ -205,7 +198,10 @@ simplot <- simdat_plot %>% #subset(h>0.7) %>%
   # ggtitle("Simulations with different h values") +
   # theme(plot.title = element_text(hjust = 0.5)) +
   my_theme() +
-  theme(#legend.position=c(0.85,0.35),
+  theme(
+        legend.position=c(0.85,0.35),
+        strip.background = element_blank(),
+        strip.text.y = element_blank(),
         legend.background = element_rect(color="black"),
         legend.key = element_rect(color="white"),
         legend.title.align=0.5,
