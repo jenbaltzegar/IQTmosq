@@ -1,5 +1,5 @@
 
-library(nimble)
+library(nimble) #version 0.9.1
 library(coda)
 library(doParallel)
 library(doRNG)
@@ -33,20 +33,22 @@ theta_fit_dat <- fit[names(theta1)]
 Nsamples <- rowSums(estim_dat)
 
 ##########
-## Run pMCMC chains in parallel. Need to build the model separately in every core
+## Run pMCMC chains in parallel. Time to run is several hours (depends on machine).
+## With nimble, need to build the model separately for every core.
+## If using a machine with fewer cores, can instead use runMCMC(nchains=3) 
 
+dir.create("pMCMC_chains")
 cores=3
-myclust <- makeCluster(cores,outfile="logs.txt")
+myclust <- makeCluster(cores,outfile="pMCMC_chains/logs.txt")
 registerDoParallel(myclust)
 myseed=12345
 registerDoRNG(myseed)
 
 #set up log file
-t.str <- Sys.time()#strptime(Sys.time(), "%Y-%m-%d %H:%M:%S")
-tfile <- paste0(as.numeric(format(t.str, "%H")),"_",as.numeric(format(t.str, "%M")),"_",as.numeric(format(t.str, "%S")))
-logfile <- paste0("prof_log_",tfile,".txt")
-writeLines(c(""),logfile)
-dir.create("pMCMC_chains")
+#t.str <- Sys.time()#strptime(Sys.time(), "%Y-%m-%d %H:%M:%S")
+#tfile <- paste0(as.numeric(format(t.str, "%H")),"_",as.numeric(format(t.str, "%M")),"_",as.numeric(format(t.str, "%S")))
+#logfile <- paste0("pMCMC_chains/log_",tfile,".txt")
+#writeLines(c(""),logfile)
 
 my_niter <- 60000
 
@@ -57,8 +59,6 @@ numberruns <- 3
 allfits <- foreach(x=iter(all_runs,by="row"),
                    .combine=rbind,
                    .packages=c("coda","nimble")) %dopar% {
-                     cat(paste("Starting iteration", x,"out of", numberruns, "at", Sys.time(),"\n"),file=logfile,append=TRUE)
-
                      # define Dirichlet-multinomial distribution (given as an example in user manual)
                      #deregisterDistributions('ddirchmulti')
                      ddirchmulti <- nimbleFunction(
@@ -117,7 +117,7 @@ allfits <- foreach(x=iter(all_runs,by="row"),
                      
                      full_model <- nimbleModel(
                        nim_mod,
-                       data=list(Y=synth_dat),
+                       data=list(Y=estim_dat),
                        constants=list(tend=tend,
                                       popsize=theta_fit_dat["popsize"],
                                       Ns=Nsamples
@@ -152,20 +152,20 @@ allfits <- foreach(x=iter(all_runs,by="row"),
                                       nchains=1,
                                       inits = initsFunction,
                                       samplesAsCodaMCMC=TRUE)
-                   
+                     
                      saveRDS(list(samp1=samps$samples,samp2=samps$samples2,
-                                  dat_sim=NULL,dat=estim_dat,
-                                  theta_fit=NULL,Nsamples=Nsamples,my_popsize=my_popsize,
+                                  dat=estim_dat,Nsamples=Nsamples,my_popsize=my_popsize,
                                   theta_fit_dat=theta_fit_dat),
-                             paste0("/pMCMC_chains/samps",x))
+                             paste0(getwd(),"/pMCMC_chains/samps",x))
                      return(NULL)
                    }
 
+stopCluster(myclust)
 
 
-## Produce summary statistics and plots
-datfolder <- "pMCMC_chains" #real dat, alph~exp(0.5), h~beta(1,1), 60k. 
-flist <- as.list(list.files(paste0(getwd(),"/",datfolder)))
+#################### Produce summary statistics and plots
+datfolder <- "pMCMC_chains"
+flist <- as.list(list.files(paste0(getwd(),"/",datfolder),pattern="samp"))
 mcmc_out <- readRDS(paste0(getwd(),"/",datfolder,"/",flist[[1]]))
 allchains <- flist %>% lapply(function(fname) {
   mcmc_out <- readRDS(paste0(getwd(),"/",datfolder,"/",fname))
@@ -179,7 +179,6 @@ varnames(allchains) <- c("A","h","R0","s")
 
 ## remove burn-in
 chains <- window(allchains,start=30000)
-chains <- window(allchains,start=30000,thin=20)
 
 ## plot of chains
 # plot(allchains)
@@ -190,17 +189,18 @@ plot(chains)
 ## diagnostics and parameter estimates
 summary(chains)
 effectiveSize(chains)
-
 crosscorr(chains)
 autocorr.diag(chains)
 gelman.diag(chains)
+
+## use thinned chain for plotting
+chains <- window(allchains,start=30000,thin=20)
 chains_matrix <- as.matrix(chains)
 chains_df <- as.data.frame(as.matrix(chains))
-
 ggpairs(chains_df[seq(1,nrow(chains_df),100),]) +my_theme()
 
 
-######## Plot 95% CI of states
+#################### Plot 95% CI of states
 
 theta_fit <- mcmc_out$theta_fit
 yvars <- genotype_names
@@ -213,31 +213,13 @@ sim_fit <- x_summ$quantiles[,c(1,3,5)]
 sim_fit <- rbind(as.data.frame(matrix(sim_fit[,1],ncol=3)),
                  as.data.frame(matrix(sim_fit[,2],ncol=3)),
                  as.data.frame(matrix(sim_fit[,3],ncol=3)))
-sim_fit <- sim_fit/theta_fit['popsize']
+sim_fit <- sim_fit/theta_fit_dat['popsize']
 names(sim_fit) <- genotype_names
 sim_fit$gen <- seq(start_gen,end_gen)
 sim_fit$quant <- rep(c(2.5,50,97.5),each=tend)
 
 sim_fit_plot <- sim_fit %>% 
   melt(measure.vars=yvars,variable.name="genotype",value.name="frequency")
-
-#set up data
-locus <- '1534'
-dat <- read.csv(paste0('mc.',locus,'.MoYr_reduced_byMonth.csv'))
-# make new columns for month and year
-dat <- cbind(dat,colsplit(as.character(dat$MonthYear),"-",c("month","year")))
-dat$year <- dat$year+2000
-dat$gen <- seq_len(nrow(dat))
-
-synth_dat <- mcmc_out$dat
-synth_sim <- mcmc_out$dat_sim
-
-estim_dat <- dat[dat$gen >= start_gen & dat$gen <= end_gen,genotype_names] #genotype columns only
-subs_dat <- dat[dat$gen >= start_gen & dat$gen <= end_gen,] #all columns
-
-#set up x-axis breaks
-year_breaks <- seq(min(which(subs_dat$year==min(subs_dat[subs_dat$month=="Jan","year"]))),
-                   nrow(subs_dat),12)
 
 parnames <- c("sSS","h","r0")
 
@@ -266,7 +248,7 @@ my_colors <- c("true\n value"="black","PMMH mean\n estimate"="red1","PMMH 95% CI
 my_breaks <- seq(37,121,12)
 my_labels <- seq(2003,2010)
 
-synth_sim_plot %>%
+sim_fit_plot %>%
   ggplot(aes(x=gen,y=frequency,group=interaction(genotype))) +
   geom_line(data=sim_fit_plot %>% subset(quant==50),
             aes(color="PMMH mean\n estimate"),
@@ -297,7 +279,3 @@ synth_sim_plot %>%
   theme(strip.background = element_blank(),
         strip.placement = "outside",
         strip.text = element_text(size=14))
-
-
-
-stopCluster(myclust)
