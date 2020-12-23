@@ -29,7 +29,7 @@ for (d in 1:length(wd)) {
   # Initial file index 
   i <- 1
   # Last part of file path
-  str_Last <- "/Analysis/PlateMap_Genotype_Zone.csv"
+  str_Last <- "/Analysis/PlateMap_Genotype.csv"
   
   # Create empty dataframe
   df <- data.frame()
