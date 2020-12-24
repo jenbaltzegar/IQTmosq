@@ -2,7 +2,7 @@
 
 ## process data: 
 ## minimum observations per month
-.min.obs <- 1
+.min.obs <- 5
 ## helper function
 mk.date <- function(yr, mon, day=1) as.Date(paste(yr, mon, day, sep='-'))
 
@@ -98,7 +98,7 @@ kdrZones <- (
   )+
   #Add data
   geom_point(size = 5) +
-  #geom_line(size = 2) +
+  geom_line(size = 1.5) +
   ## width in units of days
   geom_errorbar(width=4,  size = 0.7) +
   geom_text( 

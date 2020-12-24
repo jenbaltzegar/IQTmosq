@@ -30,7 +30,7 @@ system("./WFABC/scripts/run_WFABC_pipeline.sh") # ***need to add code to extract
 # Figure 6 - 
 # ***add Michael's script here***
 # Figure 7 - 
-source('plot_kdr.R')
+source('plot_kdrZones.R')
 # Sup Table 1 - no script
 # Sup Figure 2 
 # ***add Michael's script here***

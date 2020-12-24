@@ -1,6 +1,6 @@
 # This script will parse kdr data and analyze for HWE
 
-# rename obj to avoid overwriting
+# create new obj to avoid overwriting
 kdr <- kdrData
 kdr$newDate <- as.Date(kdr$newDate)
 
