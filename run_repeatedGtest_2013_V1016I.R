@@ -2,20 +2,8 @@
 # Started 28 Mar 2018
 # depends on setup_jb.R and meltcurve_analysis.R
 
-
-# rename objs to avoid overwriting
-mc.t13 <- mc.1016.t13
-mc.b13 <- mc.1016.b13.expanded
-
-# Add column for treatment type
-# for spray region
-mc.t13 <- cbind(mc.t13, zone = rep("treatment"))
-
-# for buffer region
-mc.b13 <- cbind(mc.b13, zone = rep("buffer"))
-
-# Combine the datasets
-dat <- rbind(mc.b13, mc.t13)
+dat <- mc.1016.zone %>%
+  filter(year==2013)
 
 ### G test should not be done on zero values. 
 # Set minimum observations
@@ -28,22 +16,11 @@ dat$R <- dat$SR + (2*dat$RR)
 dat$S <- dat$SR + (2*dat$SS)
 
 ############################################################
-# Notes about choosing expected proportions for G.tests
-# Options:
-# 1 - equal proportions - 0.5 : 0.5 ratio of R:S alleles
-# 2 - initial proportions - 0.765377 : 0.234623 ratio of R:S alleles (as of 2/9/18)
-# 3 - 2013 mean proportions - 0.7612376 : 0.2387624 ratio of R:S alleles (as of 8/2/17)
-
-# Choice:
-# Go with option #2 because we care about how the frequencies 
-# are changing over time relative to the beginning of the sampling period.
-# This choice is in line three of the Fun.xx functions as ", p=c(meanFreqR, meanFreqS)"
-# Code to automatically update initial proportions, these are also the expected proportions for 
-# the pooled G-test
+# Calculate mean initial frequencies for R and S
 # meanFreqR = freq R in April buffer zone + freq R in April spray zone / 2
 
-meanFreqR = (dat$freqR[dat$month==4 & dat$zone=="buffer"] 
-             + dat$freqR[dat$month==4 & dat$zone=="treatment"])/2
+meanFreqR = (dat$freqR[dat$month=="04" & dat$zone=="buffer"] 
+             + dat$freqR[dat$month=="04" & dat$zone=="treatment"])/2
 meanFreqS = 1 - meanFreqR
 
 ############################################################
@@ -74,7 +51,7 @@ Fun.p = function (Q){
 
 # Calculate proportion of R allele
 dat =
-  mutate(dat,
+  mutate(as.data.frame(dat),
          Prop.R = R / (R + S),                         
          G =       apply(dat[c("R", "S")], 1, Fun.G),
          df =      apply(dat[c("R", "S")], 1, Fun.df),

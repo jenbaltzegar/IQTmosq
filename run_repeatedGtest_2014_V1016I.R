@@ -1,21 +1,9 @@
 # This script performs a "Repeated G-Test" on 2014 V1016I data
-# Started 2 Aug 2017
+# Started 28 Mar 2018
 # depends on setup_jb.R and meltcurve_analysis.R
 
-
-# rename objs to avoid overwriting
-mc.t14 <- mc.1016.t14
-mc.b14 <- mc.1016.b14
-
-# Add column for treatment type
-# for spray region
-mc.t14 <- cbind(mc.t14, zone = rep("treatment"))
-
-# for buffer region
-mc.b14 <- cbind(mc.b14, zone = rep("buffer"))
-
-# Combine the datasets
-dat <- rbind(mc.b14, mc.t14)
+dat <- mc.1016.zone %>%
+  filter(year==2014)
 
 ### G test should not be done on zero values. 
 # Set minimum observations
@@ -28,22 +16,11 @@ dat$R <- dat$SR + (2*dat$RR)
 dat$S <- dat$SR + (2*dat$SS)
 
 ############################################################
-# Notes about choosing expected proportions for G.tests
-# Options:
-# 1 - equal proportions - 0.5 : 0.5 ratio of R:S alleles
-# 2 - initial proportions - 0.765377 : 0.234623 ratio of R:S alleles (as of 2/9/18)
-# 3 - 2014 mean proportions - 0.7612376 : 0.2387624 ratio of R:S alleles (as of 8/2/17)
+# Calculate mean initial frequencies for R and S
+# meanFreqR = freq R in April buffer zone + freq R in April spray zone / 2
 
-# Choice:
-# Go with option #2 because we care about how the frequencies 
-# are changing over time relative to the beginning of the sampling period.
-# This choice is in line three of the Fun.xx functions as ", p=c(meanFreqR, meanFreqS)"
-# Code to automatically update initial proportions, these are also the expected proportions for 
-# the pooled G-test
-# meanFreqR = freq R in January buffer zone + freq R in January spray zone / 2
-
-meanFreqR = (dat$freqR[dat$month==1 & dat$zone=="buffer"] 
-             + dat$freqR[dat$month==1 & dat$zone=="treatment"])/2
+meanFreqR = (dat$freqR[dat$month=="01" & dat$zone=="buffer"] 
+             + dat$freqR[dat$month=="01" & dat$zone=="treatment"])/2
 meanFreqS = 1 - meanFreqR
 
 ############################################################
@@ -67,14 +44,14 @@ Fun.df = function (Q){
 
 Fun.p = function (Q){
   G.test(x=c(Q["R"], Q["S"])
-        , p=c(meanFreqR, meanFreqS)
+         , p=c(meanFreqR, meanFreqS)
   )$p.value
 }
 
 
 # Calculate proportion of R allele
 dat =
-  mutate(dat,
+  mutate(as.data.frame(dat),
          Prop.R = R / (R + S),                         
          G =       apply(dat[c("R", "S")], 1, Fun.G),
          df =      apply(dat[c("R", "S")], 1, Fun.df),
@@ -94,6 +71,5 @@ gtest.2014 <- G.test(Data.matrix)
 
 ####### Report this #######
 print(gtest.2014)    
-###########################              
-
+###########################
 
