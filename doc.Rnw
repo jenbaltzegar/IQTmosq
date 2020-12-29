@@ -1,0 +1,71 @@
+%% Render with: source("build.R")
+%% See confi
+
+\documentclass[11pt]{article}
+
+\input{preamble.sty}
+\usepackage[margin=0.75in]{geometry}
+
+\newcommand{\shortTitle}{Evolution of kdr in Ae. aegypti}
+\title{\shortTitle}
+\date{\today}
+
+\begin{document}
+
+<<config, include=F>>=
+## set defaults
+source('knitr_config.R')
+@
+
+\section*{\shortTitle}
+
+\thispagestyle{empty}
+{\scriptsize
+\begin{itemize}
+\item This document was prepared on \today.
+
+\item Repository: \url{https://github.com/jenbaltzegar/IQTmosq.git}
+\item Google Drive Folder: \url{https://drive.google.com/drive/folders/1IhLum14gOkLlts_yjs1ZMFrRfpOEwvOG?usp=sharing}
+\end{itemize}
+}
+
+\clearpage
+\pagenumbering{arabic} 
+%\subsection*{\shortTitle}
+
+\section*{Figures}
+
+<<fig1-stub, fig.cap="Collection map", fig.height=2>>=
+plot(1)
+@
+<<fig2-stub, fig.cap="Experiment map", fig.height=2>>=
+plot(1)
+@
+
+<<fig3-haplotype-time, fig.cap="kdrHaps", fig.height=6>>=
+plot(kdrHaps)
+@
+
+<<fig4-stub, fig.cap="Haplotype map", fig.height=2>>=
+plot(1)
+@
+
+%% See WFABC/scripts/4_...
+<<fig5-wfabc-1534, fig.cap="WFABC 1534", fig.height=4>>=
+plot(1)
+@
+
+%% ?where are these located?
+<<fig6-sim-1534, fig.cap="Sim 1534", fig.height=4>>=
+plot(1)
+@
+
+<<fig7-freq-zone, fig.cap="Frequency by treatment group.", fig.height=5>>=
+plot(kdrZones)
+@
+
+%\clearpage
+%<<r si, child = 'supplemental.Rnw'>>=
+%@
+
+\end{document}

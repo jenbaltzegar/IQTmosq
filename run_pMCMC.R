@@ -197,7 +197,7 @@ gelman.diag(chains)
 chains <- window(allchains,start=30000,thin=20)
 chains_matrix <- as.matrix(chains)
 chains_df <- as.data.frame(as.matrix(chains))
-ggpairs(chains_df[seq(1,nrow(chains_df),100),]) +my_theme()
+ggpairs(chains_df[seq(1,nrow(chains_df),100),]) +my_theme
 
 
 #################### Plot 95% CI of states
@@ -275,7 +275,7 @@ sim_fit_plot %>%
   facet_grid(genotype ~ .,switch="y") +
   scale_x_continuous(name = "Year",breaks = my_breaks,labels = my_labels) +
   ylab(NULL) +
-  my_theme() +
+  my_theme +
   theme(strip.background = element_blank(),
         strip.placement = "outside",
         strip.text = element_text(size=14))

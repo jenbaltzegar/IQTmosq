@@ -72,7 +72,11 @@ kdrData <- within(kdrData, {
 # Key Code: Remove unknown location codes from kdrData and save file
 ####
 # "Unknown" location codes are typically from mosquitoes collected by Steve Stoddard outside of IQT
-kdrData <- subset(kdrData, Location_Code != "unknown")
+kdrData <- subset(kdrData, 
+    Location_Code != "unknown"
+    ## only 7
+    & !duplicated(mosquito_id)
+)
 # write.csv(kdrData,"~/Dropbox/GouldLab/Project_Mosquito/Database/kdrData_all_reduced.csv", row.names = F)
 
 ### Save file

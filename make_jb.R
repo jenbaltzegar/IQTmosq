@@ -1,10 +1,10 @@
 # Run IQTmosq Project
 
 # load libraries, functions, and themes
-source("setup_jb.R")
+source("setup.R")
 
 # load data
-source("load_data_jb.R")
+source("load_data.R")
 
 # run data analysis scripts
 source("run_prepData.R")                    # merges data into one dataframe

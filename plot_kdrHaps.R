@@ -18,14 +18,15 @@ sprayColors <- c("#A0A0A0", "#D1D1D1","#BBBBBB", "#E6E6E6", "#7F7F7F", "#FFFFFF"
 
 # Plot kdr Haplotypes -----
 kdrHaps <- ggplot(data = freq_plot, aes(x=year, y=Frequency)) +
-  my_theme() +
+  my_theme +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + # modify theme
   labs(x = "Year", y = "Frequency"
        #, title = "kdr Haplotype Frequency"
        #, subtitle = option
        ) +
-  scale_y_continuous(limits=c(-0.05, 1.05), breaks=c(0.0,0.2, 0.4, 0.6, 0.8, 1.0)) +
-  scale_x_continuous(breaks = pretty(freq_plot$year, n = 18)) +
+  scale_y_continuous(breaks=c(0.0,0.2, 0.4, 0.6, 0.8, 1.0), expand=expansion(add=0.11)) +
+  scale_x_continuous(breaks = pretty(freq_plot$year, n = 18), expand=expansion(0,0)) +
+  coord_cartesian(clip = 'off') +
   ### Add background to represent type of insecticides used 
   annotate("rect", xmin = 1999.0, xmax = 2001.5, ymin = -Inf, ymax = Inf, alpha=0.15, fill="grey") + # No pyrethroids
   annotate("rect", xmin = 2001.5, xmax = 2007.5, ymin = -Inf, ymax = Inf, alpha=0.15, fill="red") + # Delatmethrin 2002 - 2007
@@ -33,24 +34,20 @@ kdrHaps <- ggplot(data = freq_plot, aes(x=year, y=Frequency)) +
   annotate("rect", xmin = 2008.5, xmax = 2011.5, ymin = -Inf, ymax = Inf, alpha=0.15, fill="yellow") + # a-Cypermethrin 2009 - 2011
   annotate("rect", xmin = 2011.5, xmax = 2013.5, ymin = -Inf, ymax = Inf, alpha=0.15, fill="salmon4") + # Cypermethrin & a-Cypermethrin 2012 # Lambda, a-Cypermethrin, Cypermethrin, & a-Cypermethrin+pyriporx 2013
   annotate("rect", xmin = 2013.5, xmax = 2014.5, ymin = -Inf, ymax = Inf, alpha=0.15, fill="orange") + # Cypermethrin 2014
-  annotate("rect", xmin = 2014.5, xmax = 2018.0, ymin = -Inf, ymax = Inf, alpha=0.15, fill="gray") + # No pyrethroids
+  annotate("rect", xmin = 2014.5, xmax = 2017.5, ymin = -Inf, ymax = Inf, alpha=0.15, fill="gray") + # No pyrethroids
   
   ### Add text to represent type of insecticides used
-  annotate("text", x=2000.25, y=1.05, label = "No \n Pyrethroids", size = 4) +
-  annotate("text", x=2004.5, y=1.05, label= "Delta", size = 4) +
-  annotate("text", x=2008, y=1.05, label= "Cyper", size = 4) +
-  annotate("text", x=2010, y=1.05, label= "Alpha", size = 4) +
-  annotate("text", x=2012.5, y=1.05, label= "Multiple*", size = 4) +
-  annotate("text", x=2014, y=1.05, label = "Cyper", size = 4) +
-  annotate("text", x=2016, y=1.05, label = "No \n Pyrethroids", size = 4) +
-  
-  ### Add n to each year
-  annotate("text", x=2000:2017, y=-0.03, label = mc.haps.yr$n, fontface = 2, color = "#332288") +
+  annotate("text", y=1.1, size=4,
+    x=c(2000.25, 2004.5, 2008, 2010, 2012.5, 2014, 2016),
+    label=c("No \n Pyrethroids", "Delta",  "Cyper", "Alpha", "Multiple*",  "Cyper",  "No \n Pyrethroids")
+  ) +
+  annotate("text", y=-0.09, x=c(1999.5, 2000:2017), label = c(
+'N=',mc.haps.yr$n), fontface = 2, color = "#332288") +
   
   ### Add data
-  geom_line(aes(colour=Haplotype), size = 2) +
+  geom_line(aes(colour=Haplotype), size = 1.1) +
   geom_point(aes(colour=Haplotype), size = 3) +
-  geom_errorbar(data = freq_plot, aes(ymin=Frequency-CI_95, ymax=Frequency+CI_95, colour=Haplotype), width=.2, size = 0.7) +
+  geom_errorbar(data = freq_plot, aes(ymin=Frequency-CI_95, ymax=Frequency+CI_95, colour=Haplotype), width=.14, size = 0.7) +
   ## 2-column legend on top
   theme(
     legend.position='top', 

@@ -73,7 +73,7 @@ kdrZones <- (
         year=c(2013, 2014, 2014)
     ),
     ymin = -Inf, ymax = Inf, 
-    fill="yellow", alpha = 0.5
+    fill="yellow", alpha = 0.4
   ) +
   geom_text(
     aes(x=date, label=label),
@@ -92,31 +92,46 @@ kdrZones <- (
     ## only small-ish p-values
     data=subset(kdr.mod.contr, p.value<0.1), 
     inherit.aes=F,
+    nudge_x = -3,
+    nudge_y = .05+ c(1,0)*0.08,
     mapping=aes(x=date, y=0.1, label=sprintf('p=%0.2g', p.value))
     ## override: just asterisk
     #label='*'
   )+
   #Add data
-  geom_point(size = 5) +
-  geom_line(size = 1.5) +
+  geom_line() +
   ## width in units of days
-  geom_errorbar(width=4,  size = 0.7) +
+  geom_point(size = 3) +
+  geom_errorbar(width=3,  size = 0.7, alpha=0.8) +
   geom_text( 
     ## treatment above buffer
-    aes(y=(0.0 + 0.05*(zone=='treatment'))),
+    aes(y=(0.0 + 0.07*(zone=='treatment'))),
     fontface=2
   ) +
+  ## add "N=" in each panel
+  geom_text(
+    fontface=2, 
+    inherit.aes=F,
+    mapping=aes(x=x, y=y, label=label),
+    data=data.frame(
+        y=0.035, 
+        x=as.Date(c('2013-03-20', '2013-12-15')), 
+        label='N=', year=c('2013','2014')
+    )
+  )+
   ylim(c(0.0,1)) +
   #xlim(c(1,11)) +
   ## label by month (%B is full month)
-  scale_x_date(date_breaks = '1 month', date_labels='%b') +
-  #my_theme() +
-  theme_bw() +
+  scale_x_date(
+    date_breaks = '1 month', date_labels='%b',
+    expand=expansion(add=c(10,15))
+  ) +
+  my_theme +
   theme(
-    legend.position=c(0.95, 0.2),
-    ## bottom-left corner
-    legend.justification=c(1,0)
-  )
+    legend.position='top',
+    legend.direction='horizontal',
+  ) +
+  guides(color=guide_legend(ncol=2, override.aes=list(size=3, linetype=0)))
 )
 
 # View plot

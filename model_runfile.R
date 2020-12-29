@@ -1,4 +1,3 @@
-
 ##########################################################
 # This code does the following: 
 # - load in data and choose which months to use
@@ -13,10 +12,10 @@ source('model_setup.R')
 ## read in data for locus 1534 or 1016 from current working directory
 locus <- '1016'
 locus <- '1534'
-dat <- read.csv(paste0('mc.',locus,'.MoYr_reduced_byMonth.csv'))
+dat <- read.csv(paste0('data/mc.',locus,'.MoYr_reduced_byMonth.csv'))
 # make new columns for month and year
 dat <- cbind(dat,colsplit(as.character(dat$MonthYear),"-",c("month","year")))
-dat$year <- dat$year+2000
+dat$year <- dat$year
 dat$gen <- seq_len(nrow(dat))
 start_gen <- 34
 end_gen <- 120
@@ -87,16 +86,16 @@ boot_pairplot <- newbootout %>% ggplot(aes(x=sSS,y=h)) +
   geom_point(data=data.frame("h"=theta_fit_dat["h"],"sSS"=theta_fit_dat["sSS"]),color="red",size=3) +
   geom_point(data=data.frame("h"=mean(newbootout$h),"sSS"=mean(newbootout$sSS)),color="green",size=2) +
   # coord_fixed(ratio=1)+
-  my_theme()
+  my_theme
 boot_pairplot
-# pairwise <- ggpairs(newbootout) + my_theme()
+# pairwise <- ggpairs(newbootout) + my_theme
 
 boot_boxplot <- newbootout %>% 
   melt(measure.var=parnames,value.name="estimate",variable.name="parameter") %>%
   ggplot(aes(x=parameter,y=estimate)) +
   geom_boxplot() +
   geom_point(data=CIs,color="red")+
-  my_theme()
+  my_theme
 boot_boxplot
 
 grid.arrange(boot_pairplot,boot_boxplot,nrow=1)
@@ -197,7 +196,7 @@ simplot <- simdat_plot %>% #subset(h>0.7) %>%
   ylab("R Allele Frequency") +
   # ggtitle("Simulations with different h values") +
   # theme(plot.title = element_text(hjust = 0.5)) +
-  my_theme() +
+  my_theme +
   theme(
         legend.position=c(0.85,0.35),
         strip.background = element_blank(),
@@ -261,7 +260,7 @@ gridplot <- parvals2_plot %>%
 
   scale_color_manual(values = my_colors)+
   guides(color=F)+
-  my_theme()
+  my_theme
 gridplot
 
 grid.arrange(simplot,gridplot) #need to properly configure legend if doing this
@@ -307,6 +306,6 @@ prof_vals %>% melt(names(prof_vals[1])) %>%
   facet_grid(variable~.,scale="free_y") +
   scale_x_continuous(limits=c(0,max(prof_vals[profile_var])),
                      name = as.name(profile_var),expand=c(0,0)) +
-  my_theme()
+  my_theme
 
 ###############################
