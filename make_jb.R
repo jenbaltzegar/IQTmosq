@@ -9,11 +9,11 @@ source("load_data_jb.R")
 # run data analysis scripts
 source("run_prepData.R")                    # merges data into one dataframe
 ## slow
-source("run_meltcurve_analysis.R")          # genotype/haplotype construction - warning messages can be safely ignored
+source("run_meltcurve_analysis.R")          # genotype/haplotype construction
 #browser()
 source("run_Haplotype_Imputation.R")        # create obj for plot_kdrHaps.R
-#source("run_repeatedGtest_2013_V1016I.R")   # report gtest.2013
-#source("run_repeatedGtest_2014_V1016I.R")   # report gtest.2014
+source("run_repeatedGtest_2013_V1016I.R")   # report gtest.2013
+source("run_repeatedGtest_2014_V1016I.R")   # report gtest.2014
 source("run_kdr_testHWE.R")                 # HWE analysis  - errors due to fixation of one allele in a given month
 
 # create tables and figures for manuscript

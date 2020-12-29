@@ -48,7 +48,7 @@ WF_1gen <- function(theta,genos_t,stoch_on=0){
     (genos_t[1]^2 + genos_t[1]*genos_t[2] + 1/4*genos_t[2]^2),
     (1-theta["h"]*theta["sSS"])*(genos_t[1]*genos_t[2] + 2*genos_t[1]*genos_t[3] +
                  1/2*genos_t[2]^2 + genos_t[2]*genos_t[3]),
-    (1-theta["sSS"])*(genos_t[3]^2 + genos_t[2]*genos_t[3] + 1/4*genos_t[2]^2)
+    (1-theta["sSS"])*(genos_t[3]^2 + genos_t[2]*genos_t[3] + 1/4*genos_t[2]^2) #+ 0.005
   )
   names(nextgen) <- genotype_names
   nextgen <- nextgen/sum(nextgen)
@@ -65,7 +65,13 @@ WF_sim <- function(theta,n_gens=12,stoch_on=0){
   
   allgens <- matrix(0,ncol=3,nrow=n_gens)
   p1 <- theta["r0"]
-  allgens[1,] <- c(p1^2,2*p1*(1-p1),(1-p1)^2) #hardy-weinberg
+  # allgens[1,] <-
+  g1 <- c(p1^2,2*p1*(1-p1),(1-p1)^2) #hardy-weinberg
+  if (stoch_on==1){
+    allgens[1,] <- rmultinom(1,theta["popsize"],g1)/theta["popsize"]
+  }else{
+    allgens[1,] <- g1
+  }
   for (i in 2:n_gens){
     nextgen <- WF_1gen(theta,genos_t=allgens[i-1,],stoch_on=stoch_on)
     allgens[i,] <- nextgen
@@ -121,7 +127,7 @@ get_MLE <- function(dat_in,theta,parnames){
   # other parameters set as in theta.
   # typically smooth surface, but need to be careful about local minima
   tend <- nrow(dat_in)
-  p <- rep(0.5,length(parnames))
+  p <- rep(0.2,length(parnames))
   sol <- optim(par=transto(p),fn=val_func,parnames=parnames,theta=theta,dat=dat_in,control=list(maxit=2000))
   if(sol$convergence!=0){
     print("Solver did not converge.")
