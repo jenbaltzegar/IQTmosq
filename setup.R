@@ -13,6 +13,10 @@ library(doParallel)
 library(gridExtra)
 library(viridis)
 library(RColorBrewer)
+## WFABC
+library(MASS) 
+library(matrixStats) 
+library(gridGraphics) 
 ## requires dependencies
 ## see http://www.bioconductor.org/packages/release/bioc/html/mixOmics.html
 library(RVAideMemoire) # for repeated g-test

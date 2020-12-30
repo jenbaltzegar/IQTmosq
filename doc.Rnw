@@ -51,17 +51,37 @@ plot(1)
 @
 
 %% See WFABC/scripts/4_...
-<<fig5-wfabc-1534, fig.cap="WFABC 1534", fig.height=4>>=
-plot(1)
+<<fig5-wfabc-1534, fig.cap="WFABC 1534", fig.height=3.75>>=
+plot_grid(
+    boxplot_s.1534,
+    boxplot_h.1534,
+    dens.1534,
+    nrow=1,
+    labels=c('a.','b.', 'c.')
+)
+    
 @
 
-%% ?where are these located?
-<<fig6-sim-1534, fig.cap="Sim 1534", fig.height=4>>=
+%% Michael Vella figs
+%% ?where is the code for these located?
+<<fig6-sim-1534, fig.cap="Sim 1534", fig.height=2>>=
 plot(1)
 @
 
 <<fig7-freq-zone, fig.cap="Frequency by treatment group.", fig.height=5>>=
 plot(kdrZones)
+@
+
+
+<<figs1-wfabc-1016, fig.cap="WFABC 1016", fig.height=4>>=
+plot_grid(
+    boxplot_s.1016,
+    boxplot_h.1016,
+    dens.1016,
+    nrow=1,
+    labels=c('a.','b.', 'c.')
+)
+    
 @
 
 %\clearpage
