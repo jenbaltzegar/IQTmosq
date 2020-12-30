@@ -26,7 +26,7 @@ source("run_LD_V410L-V1016I.R") # linkage disequilibrium analysis
 source("plot_kdrHaps.R")
 # Figure 4 - no script
 # Figure 5 & Sup Figure 1
-system("./WFABC/scripts/run_WFABC_pipeline.sh") # ***need to add code to extract plots and make fig for paper***
+source("./WFABC/run_pipeline.R", chdir=T)
 # Figure 6 - 
 # ***add Michael's script here***
 # Figure 7 - 

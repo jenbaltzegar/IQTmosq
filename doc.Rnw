@@ -73,7 +73,7 @@ plot(kdrZones)
 @
 
 
-<<figs1-wfabc-1016, fig.cap="WFABC 1016", fig.height=4>>=
+<<figs1-wfabc-1016, fig.cap="WFABC 1016", fig.height=.375>>=
 plot_grid(
     boxplot_s.1016,
     boxplot_h.1016,
