@@ -126,4 +126,5 @@ LD.V410L <- cbind(year, LD.V410L)
 colnames(LD.V410L) <- c("year", "D'", "R^2", "X^2", "P-value", "n")
 LD.V410L <- as.data.frame(LD.V410L)
 
-print(LD.V410L)
+# print(LD.V410L)
+write.csv(LD.V410L, file = "./output/table2_LD.csv", row.names = FALSE)
