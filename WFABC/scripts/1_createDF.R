@@ -18,13 +18,12 @@
 #   the number of individuals for diploids), and the second line to the 
 #   number of A alleles at each time point.
 ##########################################################
+## assumes: source("./scripts/function_createDF.R")
 
 # load data
+## path relative to WFABC
 mc.1016.byMo <- read.csv("../data/mc.1016.byMo.csv", header = TRUE)
 mc.1534.byMo <- read.csv("../data/mc.1534.byMo.csv", header = TRUE)
-
-# source functions
-source("./scripts/function_createDF.R")
 
 ##! subset by date
 # Restrict dfs for period of selection
@@ -38,4 +37,3 @@ create.WFABC.df.byMo(mc.1534.byMo.sel, filename = "./F1534C_byMo_sel.txt")
 # ### Remove months with no samples - functions sourced from function_createDF.R -----
 remove.noSamples.onelocus("./V1016I_byMo_sel.txt")
 remove.noSamples.onelocus("./F1534C_byMo_sel.txt")
-

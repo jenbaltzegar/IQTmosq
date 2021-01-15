@@ -38,25 +38,28 @@ mc.1534.byMo <- group_modify(mc.dat, ~mc.1534(.x))
 # write df to csv
 #write.csv(mc.1534.byMo, file = "./data/mc.1534.byMo.csv", row.names = FALSE)
 
+## Subset: only keep complete 1016 records
 ##? TODO: check observation counts for 2014, e.g. March treatment
 ##  aa = subset(kdrData, project_code == 'treatment' & year(newDate)==2014 & month(newDate)==3)
 dat.zone <- sqldf("
-    Select V1016I_converted, newDate, project_code as zone,
+    Select V1016I_converted, F1534C_converted,  newDate, project_code as zone,
     strftime('%Y', newDate) as year,  strftime('%m', newDate) as month 
     from kdrData
     where project_code is not null
+    and V1016I_converted is not null 
+    and not V1016I_converted = 'error'
     and (
         newDate between '2013-01-01' and '2013-10-31' 
         or newDate between '2014-01-01' and '2014-10-31'
     ) 
     and not (
-        newDate > '2014-01-01' and project_code = 'other'
+        newDate >= '2014-01-01' and project_code = 'other'
     )
 ")
 
 ## 
 .id.x <- with(dat.zone, 
-    year==2013 & zone != 'treatment'
+    year==2013 & zone == 'other'
 )
 ## indentify 2013 "expanded buffer"
 dat.zone <- within(dat.zone, {

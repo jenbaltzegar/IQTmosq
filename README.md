@@ -7,4 +7,15 @@ Code to analyze population data for Aedes aegypti from Iquitos, Peru
   + Link to paper: http://jjensenlab.org/wp-content/uploads/2016/02/Foll_Shim_Jensen_2014.pdf  
   + Link to program: http://jjensenlab.org/software  
   
+=======
+Code to analyze population data for Aedes aegypti from IQT
 
+## Dependencies
+* R (circa 3.5)
+- see `setup.R` for required R libraries
+- tinytex install
+* Linux? (WFABC)
+
+## Key files
+* `make.R`: run analysis & initialize figures
+* `build.R`: render figures usinguse output of `make.R` to re

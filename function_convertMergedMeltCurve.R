@@ -4,29 +4,28 @@
 # HomozygousLow melt curve results are homozygous for the resistance allele
 # Heterozygous melt curve results are heterozygous for the resistance and susceptible allele
 # HomozygousHigh melt curve results are homozygous for the susceptible allele
-
-
-
-convert1016 <- function(mergedData){
-  x <- ifelse(mergedData$V1016I == "HomozygousLow", "RR"
-         , ifelse(mergedData$V1016I == "Heterozygous", "SR"
-                  , ifelse(mergedData$V1016I == "HomozygousHigh", "SS"
-                           , "error")))
-  return(x)
+# All else NA
+convert1016 <- function(x){
+    x <- factor(x,
+        levels=c("HomozygousLow", "Heterozygous", "HomozygousHigh", "error"), 
+        labels=c("RR", "SR", "SS", "error")
+    )
+    x[is.na(x)] <- 'error'
+    return(x)
 }
-
 
 ### For the 1534 Locus
 # HomozygousLow melt curve results are homozygous for the susceptible allele
 # Heterozygous melt curve results are heterozygous for the resistance and susceptible allele
 # HomozygousHigh melt curve results are homozygous for the resistance allele
 
-convert1534 <- function(mergedData){
-  x <- ifelse(mergedData$F1534C == "HomozygousLow", "SS"
-              , ifelse(mergedData$F1534C == "Heterozygous", "SR"
-                       , ifelse(mergedData$F1534C == "HomozygousHigh", "RR"
-                                , "error")))
-  return(x)
+convert1534 <- function(x){
+    x <- factor(x,
+        levels=c("HomozygousLow", "Heterozygous", "HomozygousHigh", "error"), 
+        labels=c("SS", "SR", "RR", "error")
+    )
+    x[is.na(x)] <- 'error'
+    return(x)
 }
 
 
@@ -35,20 +34,11 @@ convert1534 <- function(mergedData){
 # Heterozygous melt curve results are heterozygous for the resistance and susceptible allele
 # HomozygousHigh melt curve results are homozygous for the susceptible allele
 
-convert410 <- function(mergedData){
-  x <- ifelse(mergedData$V410L == "HomozygousLow", "RR"
-              , ifelse(mergedData$V410L == "Heterozygous", "SR"
-                       , ifelse(mergedData$V410L == "HomozygousHigh", "SS"
-                                , "error")))
-  return(x)
+convert410 <- function(x){
+    x <- factor(x,
+        levels=c("HomozygousLow", "Heterozygous", "HomozygousHigh", "error"), 
+        labels=c("RR", "SR", "SS", "error")
+    )
+    x[is.na(x)] <- 'error'
+    return(x)
 }
-
-
-
-
-
-
-
-
-
-

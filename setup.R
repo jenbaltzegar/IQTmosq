@@ -9,6 +9,14 @@ library(dplyr)
 library(reshape2) # for haplotype imputation
 library(ggplot2)
 library(ggthemes)
+library(doParallel)
+library(gridExtra)
+library(viridis)
+library(RColorBrewer)
+## WFABC
+library(MASS) 
+library(matrixStats) 
+library(gridGraphics) 
 ## requires dependencies
 ## see http://www.bioconductor.org/packages/release/bioc/html/mixOmics.html
 library(RVAideMemoire) # for repeated g-test
@@ -16,6 +24,7 @@ library(genetics) # for LD analysis & HWE
 ## for pipe: %.>%
 library(wrapr)
 library(emmeans)
+library(cowplot)
 
 
 # Source functions -----
@@ -29,5 +38,4 @@ source("function_mc.410.R")
 source("function_mc.haps.R")
 
 # Source ggplot themes -----
-source("ggplotTheme_Vella.R")
-
+source("ggplot_theme.R")

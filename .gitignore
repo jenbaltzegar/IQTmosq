@@ -2,3 +2,13 @@
 .Rhistory
 .RData
 .Ruserdata
+## knitr / document build
+doc.tex
+doc.log
+figure/
+output/
+## gdrive folders
+data/
+qgis/
+## program output
+WFABC/results/

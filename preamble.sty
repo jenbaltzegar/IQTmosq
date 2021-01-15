@@ -1,0 +1,28 @@
+%% input at head of Rnw document
+%% Load latex packages & config
+%% Some of these may be extraneous
+
+\usepackage[format=hang,justification=raggedright,singlelinecheck=false]{caption}
+\captionsetup{font=scriptsize,labelfont=scriptsize}
+%% basic setup
+\usepackage{amsmath}
+\usepackage{float}
+%\floatplacement{figure}{H}
+\usepackage[hidelinks]{hyperref}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+%?
+\usepackage{wrapfig}
+%\usepackage{grffile}
+%%
+
+\newcommand{\beginSI}{
+    \setcounter{table}{0}
+    \renewcommand{\thetable}{S\arabic{table}}
+    \setcounter{figure}{0}
+    \renewcommand{\thefigure}{S\arabic{figure}}                 \setcounter{page}{1}
+    \renewcommand{\thepage}{S\arabic{page}}
+}
+
+%% Tracker variable
+\newcommand{\hasPreamble}{}
