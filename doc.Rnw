@@ -56,8 +56,11 @@ plot_grid(
     boxplot_s.1534,
     boxplot_h.1534,
     dens.1534,
-    nrow=1,
-    labels=c('a.','b.', 'c.')
+    boxplot_s.1016,
+    boxplot_h.1016,
+    dens.1016,
+    nrow=2,
+    labels=c('a.','b.', 'c.', 'a.','b.', 'c.')
 )
     
 @
