@@ -51,7 +51,7 @@ plot(1)
 @
 
 %% See WFABC/scripts/4_...
-<<fig5-wfabc-1534, fig.cap="WFABC 1534", fig.height=3.75>>=
+<<fig5-wfabc-1534, fig.cap="WFABC Results", fig.height=4.5>>=
 plot_grid(
     boxplot_s.1534,
     boxplot_h.1534,
@@ -60,7 +60,7 @@ plot_grid(
     boxplot_h.1016,
     dens.1016,
     nrow=2,
-    labels=c('a.','b.', 'c.', 'a.','b.', 'c.')
+    labels=c('a.','b.', 'c.', 'd.','e.', 'f.')
 )
     
 @

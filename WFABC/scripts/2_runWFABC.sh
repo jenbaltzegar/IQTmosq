@@ -7,8 +7,8 @@ V1016I="./V1016I_byMo_sel.txt"
 F1534C="./F1534C_byMo_sel.txt"
 
 twoNe=1000
-min_s=0.0
-max_s=5.0
+min_s=-1.0
+max_s=0
 min_h=0
 max_h=1
 
