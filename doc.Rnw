@@ -35,57 +35,90 @@ source('knitr_config.R')
 
 \section*{Figures}
 
-<<fig1-stub, fig.cap="Collection map", fig.height=2>>=
-plot(1)
-@
-<<fig2-stub, fig.cap="Experiment map", fig.height=2>>=
-plot(1)
-@
+%% Figure 1
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.7\textwidth]{Figure1.png}
+\caption{Map of Iquitos, Peru showing collection sites for Ae. aegypti collected from 2000 - 2017. Black lines represent roadways. Collection sites are represented by green circles. Darker green indicates more sampling.}
+\end{figure}
 
-<<fig3-haplotype-time, fig.cap="kdrHaps", fig.height=6>>=
+%% Figure 2
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.7\textwidth]{Figure2.png}
+\caption{Maps of the 2013 and 2014 suppression experiments showing the buffer (blue) and spray (red) zones from where Ae. aegypti were collected. Many houses, often sharing walls, form blocks that are separated by roadways (black lines).}
+\end{figure}
+
+<<fig3-haplotype-time, fig.cap="kdr haplotype frequencies from 2000 - 2017. Shaded areas represent periods when pyrethroids were used or not. The specific type of pyrethroid is abbreviated in the shaded area (i.e., Delta = deltamethrin, Cyper = cypermethrin, and Alpha = alpha-cypermethrin). Multiple* represents a period from 2012 – 2013 where multiple chemistries were used, including cypermethrin, alpha-cypermethrin, lambda-cyhalothrin, and alpha-cypermethrin+pyriproxyfen. Number of individuals genotyped per year are shown below y = 0.0. Error Bars = 95 percent CI. ", fig.height=6>>=
 plot(kdrHaps)
 @
 
-<<fig4-stub, fig.cap="Haplotype map", fig.height=2>>=
-plot(1)
-@
+%% Figure 4
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.7\textwidth]{Figure4.png}
+\caption{Maps of individual mosquitoes color coded by genotype. Colors similar to haplotypes depicted in figure 3. a) 2000 - 2001 pre-pyrethroid use in Iquitos. b) 2002 - 2005 early pyrethroid use. c) 2006 - 2010 sustained pyrethroid use before Ile1016/Cys1534 haplotype emerges. d) 2011 - 2014, sustained pyrethroid use following emergence of Ile1016/Cys1534 haplotype. Some points displaced in concentric circles to show individuals collected from the same location.}
+\end{figure}
 
 %% See WFABC/scripts/4_...
-<<fig5-wfabc-1534, fig.cap="WFABC Results", fig.height=4.5>>=
+<<fig5-wfabc-1534, fig.cap="WFABC Results", fig.height=6>>=
+lab1 <- ggdraw() + draw_label("Locus 1534", angle=90
+                              , fontface = "bold", size = 18)
+lab2 <- ggdraw() + draw_label("Locus 1016", angle=90
+                              , fontface = "bold", size = 18)
+
 plot_grid(
-    boxplot_s.1534,
-    boxplot_h.1534,
-    dens.1534,
-    boxplot_s.1016,
-    boxplot_h.1016,
-    dens.1016,
-    nrow=2,
-    labels=c('a.','b.', 'c.', 'd.','e.', 'f.')
+    lab1, boxplot_s.1534, boxplot_h.1534, dens.1534,
+    lab2, boxplot_s.1016, boxplot_h.1016, dens.1016,
+    nrow=2, 
+    ## labs are narrower than plots
+    rel_widths=c(0.2, 1,1,1),
+    ## insert blank labels
+    labels=c('', 'a.','b.', 'c.', '',  'd.','e.', 'f.')
 )
     
 @
 
+%% Figure 6
 %% Michael Vella figs
 %% ?where is the code for these located?
-<<fig6-sim-1534, fig.cap="Sim 1534", fig.height=2>>=
-plot(1)
-@
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.7\textwidth]{Figure6.png}
+\caption{Deterministic model simulations with different dominance parameters. Points indicate empirical 1534 allele (R) frequencies by month, with point size corresponding to the sample size. Model simulations began in October 2002, with initial condition R0=0.15 to correspond to the sample of 1 RR, 1 SR, and 8 SS. For each value of h (indicated by color), the value of s providing the maximum likelihood was used for the simulation. }
+\end{figure}
+
 
 <<fig7-freq-zone, fig.cap="Frequency by treatment group.", fig.height=5>>=
 plot(kdrZones)
 @
 
+%% Figure S1
+%% Michael Vella figs
+%% ?where is the code for these located?
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.7\textwidth]{FigureS1.png}
+\caption{Deterministic model simulations for locus 1534 with different dominance parameters. Points indicate empirical 1534 genotype frequencies, with point size corresponding to the sample size. Model simulations begin in October 2002.}
+\end{figure}
 
-<<figs1-wfabc-1016, fig.cap="WFABC 1016", fig.height=3.75>>=
-plot_grid(
-    boxplot_s.1016,
-    boxplot_h.1016,
-    dens.1016,
-    nrow=1,
-    labels=c('a.','b.', 'c.')
-)
-    
-@
+%% Figure S2
+%% Michael Vella figs
+%% ?where is the code for these located?
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.7\textwidth]{FigureS2.png}
+\caption{pMCMC pairwise posterior distributions.}
+\end{figure}
+
+%% Figure S3
+%% Michael Vella figs
+%% ?where is the code for these located?
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.7\textwidth]{FigureS3.png}
+\caption{pMCMC genotype frequency estimates and 95 percent credible intervals. Points indicate empirical 1534 genotype frequencies, with point size corresponding to the sample size. The pMCMC posterior mean genotype frequencies are shown by the red line, and the shaded region shows the 95 percent credible interval.}
+s\end{figure}
 
 %\clearpage
 %<<r si, child = 'supplemental.Rnw'>>=

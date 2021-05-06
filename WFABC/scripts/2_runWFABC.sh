@@ -13,7 +13,7 @@ min_h=0
 max_h=1
 
 # choose Mac, Linux, or Windows
-myos=Linux
+myos=Mac
 # path=paste0("../programs/WFABC_v1.1/binaries/", myos, "/")
 bin1=../programs/WFABC_v1.1/binaries/$myos/wfabc_1
 bin2=../programs/WFABC_v1.1/binaries/$myos/wfabc_2
