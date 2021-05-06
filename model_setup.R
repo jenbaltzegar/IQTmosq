@@ -98,7 +98,8 @@ get_MLE <- function(dat_in,theta,parnames){
   # typically smooth surface, but need to be careful about local minima
   tend <- nrow(dat_in)
   p <- rep(0.2,length(parnames))
-  sol <- optim(par=transto(p),fn=val_func,parnames=parnames,theta=theta,dat=dat_in,control=list(maxit=2000))
+  sol <- optim(par=transto(p),fn=val_func,parnames=parnames,theta=theta,dat=dat_in,
+               control=list(maxit=2000,warn.1d.NelderMead = FALSE))
   if(sol$convergence!=0){
     print("Solver did not converge.")
   }

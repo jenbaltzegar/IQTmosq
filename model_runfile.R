@@ -8,17 +8,15 @@
 ## load packages and functions from estim_setup.R
 source('model_setup.R')
 ## read in data for locus 1534 or 1016 from current working directory
-# locus <- '1016'
+# locus <- '1016' # *only for plotting data*
 locus <- '1534'
 dat <- read.csv(paste0('mc.',locus,'.MoYr_reduced_byMonth.csv'))
 # make new columns for month and year
 dat <- cbind(dat,colsplit(as.character(dat$MonthYear),"-",c("month","year")))
 dat$year <- dat$year + 2000
 dat$gen <- seq_len(nrow(dat))
-start_gen <- 34
-end_gen <- 120
-# start_gen <- 124
-# end_gen <- 216
+start_gen <- if(locus=='1534'){34}else{97}
+end_gen <- if(locus=='1534'){120}else{216}
 tend <- end_gen - start_gen + 1
 
 #subset data by specified generations 
@@ -32,7 +30,7 @@ subs_dat2 <- dat[dat$gen <= end_gen,] #all columns
 theta1 <- c("sSS"=0.3,"h"=0.05,"r0"=0.01,"popsize"=500)
 parnames <- c("sSS","h")
 theta1["r0"] <- dat$freqR[start_gen]
-
+if(locus=='1016'){theta1["r0"] <- 0.0001}
 # maximum likelihood estimate from function in model_setup.R
 fit <- get_MLE(estim_dat,theta1,parnames)
 fit
@@ -52,7 +50,7 @@ parvals1 <- expand.grid("start_gen" = start_gen,
                         "end_gen" = end_gen,
                         "h"=as.vector(c(seq(0,1,.25))),#,theta_fit_dat["h"])),
                         "sSS" = as.vector(theta_fit_dat["sSS"]),
-                        "r0" = dat$freqR[start_gen]
+                        "r0" = as.vector(theta1["r0"])
                         )
 
 # choose parameters to estimate
@@ -106,16 +104,23 @@ simdat_plot_genos$h <- as.factor(round(simdat_plot_genos$h,3))
 dat_plot_genos <- dat_plot %>% na.omit() %>%
   melt(measure.var=yvars,variable.name="genotype",value.name="frequency")
 
-#set up x-axis breaks
-year_breaks <- seq(min(which(dat$year==min(dat[dat$month=="Jan","year"]))),
-                   nrow(dat),12)
-
 #set up h lines
 vir_colors <- viridis(5)
 mysizes <- rep(1.5,5)
 myalpha <- rep(0.8,5)
 
-# Figure 6: plots R allele frequency
+# for 1016, produce figures without simulation results
+if(locus=="1016"){
+  simdat_plot <- simdat_plot %>% subset(gen<0)
+  dat_plot_allele <- dat_plot_allele %>% subset(year>=minyear)
+  simdat_plot_genos <- simdat_plot_genos %>% subset(gen<0)
+  dat_plot_genos <- dat_plot_genos %>% subset(year>=minyear)
+  my_legend_position <- c(0.75,0.22)
+}else{
+  my_legend_position <- c(0.85,0.26)
+}
+
+# Plot R allele frequency
 simplot <- simdat_plot %>%
   ggplot(aes(x=gen,y=frequency)) +
   geom_line(aes(color=h,alpha=h,
@@ -129,12 +134,13 @@ simplot <- simdat_plot %>%
              labels=c(0,100,200,expression("">=300)))+
   
   scale_y_continuous(expand = c(0.03,0))+
-  scale_x_continuous(name = "Year",breaks = dat$gen[year_breaks],labels = dat$year[year_breaks]) +
+  scale_x_continuous(name = "Year",breaks = seq(1,12*19,12),labels = seq(2000,2018)) +
+  # scale_x_continuous(name = "Year",breaks = dat$gen[year_breaks],labels = dat$year[year_breaks]) +
   ylab("R Allele Frequency") +
   
   my_theme +
   theme(
-        legend.position=c(0.85,0.26),
+        legend.position=my_legend_position,
         strip.background = element_blank(),
         legend.background = element_rect(color=NA),
         legend.key = element_rect(color="white"),
@@ -143,11 +149,11 @@ simplot <- simdat_plot %>%
         ) +
   guides(color = guide_legend(override.aes = list(size = 3)))
 simplot
-pdf(file = "fig6.pdf",width = 9.89,height=7.72)
+pdf(file = paste0("time_series_Rallele_",locus,".pdf"),width = 9.89,height=7.72)
 simplot
 dev.off()
 
-# Figure S1: plots genotype frequencies
+# Plot genotype frequencies
 levels(simdat_plot_genos$genotype) <- paste(levels(simdat_plot_genos$genotype),"Frequency")
 levels(dat_plot_genos$genotype) <- paste(levels(dat_plot_genos$genotype),"Frequency")
 simplot_genos <- simdat_plot_genos %>% 
@@ -165,7 +171,7 @@ simplot_genos <- simdat_plot_genos %>%
   facet_grid(genotype ~ .,switch="y")+
   
   scale_y_continuous(expand = c(0.03,0))+
-  scale_x_continuous(name = "Year",breaks = dat$gen[year_breaks],labels = dat$year[year_breaks]) +
+  scale_x_continuous(name = "Year",breaks = seq(1,12*19,12),labels = seq(2000,2018)) +
   ylab(NULL) +
   
   my_theme +
@@ -180,6 +186,6 @@ simplot_genos <- simdat_plot_genos %>%
   ) +
   guides(color = guide_legend(override.aes = list(size = 3)))
 simplot_genos
-pdf(file = "figS1.pdf",width = 9.89,height=9.1)
+pdf(file = paste0("time_series_genotype_",locus,".pdf"),width = 9.89,height=9.1)
 simplot_genos
 dev.off()
