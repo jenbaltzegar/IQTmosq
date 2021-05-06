@@ -3,6 +3,7 @@ library(nimble) #version 0.9.1
 library(coda)
 library(doParallel)
 library(doRNG)
+library(GGally)
 
 source('model_setup.R')
 ## read in data for locus 1534 from current working directory
@@ -181,9 +182,7 @@ varnames(allchains) <- c("A","h","R0","s")
 chains <- window(allchains,start=30000)
 
 ## plot of chains
-# plot(allchains)
-# plot(allchains,density=F)
-plot(chains)
+# plot(chains)
 #plot(chains,density=F)
 
 ## diagnostics and parameter estimates
@@ -194,11 +193,13 @@ autocorr.diag(chains)
 gelman.diag(chains)
 
 ## use thinned chain for plotting
-chains <- window(allchains,start=30000,thin=20)
+chains <- window(allchains,start=30000)
 chains_matrix <- as.matrix(chains)
 chains_df <- as.data.frame(as.matrix(chains))
-ggpairs(chains_df[seq(1,nrow(chains_df),100),]) +my_theme
-
+figS2 <- ggpairs(chains_df[seq(1,nrow(chains_df),100),]) +my_theme
+pdf(file = "figS2.pdf",width = 9.89,height=8.22)
+figS2
+dev.off()
 
 #################### Plot 95% CI of states
 
@@ -248,7 +249,7 @@ my_colors <- c("true\n value"="black","PMMH mean\n estimate"="red1","PMMH 95% CI
 my_breaks <- seq(37,121,12)
 my_labels <- seq(2003,2010)
 
-sim_fit_plot %>%
+figS3 <- sim_fit_plot %>%
   ggplot(aes(x=gen,y=frequency,group=interaction(genotype))) +
   geom_line(data=sim_fit_plot %>% subset(quant==50),
             aes(color="PMMH mean\n estimate"),
@@ -279,3 +280,6 @@ sim_fit_plot %>%
   theme(strip.background = element_blank(),
         strip.placement = "outside",
         strip.text = element_text(size=14))
+pdf(file = "figS3.pdf",width = 9.89,height=9.1)
+figS3
+dev.off()
